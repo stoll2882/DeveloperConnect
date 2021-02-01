@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -18,13 +20,23 @@
   },
   "homepage": "https://github.com/stoll2882/DeveloperConnect#readme",
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-syntax-class-properties": "^7.12.1",
+    "@babel/plugin-transform-classes": "^7.12.1",
+    "babel": "^6.23.0",
     "bcryptjs": "^2.4.3",
+    "class-utils": "^0.3.6",
     "config": "^3.3.3",
+    "create-react-app": "^4.0.1",
     "express": "^4.17.1",
     "express-validator": "^6.8.1",
     "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
+    "posix-character-classes": "^1.0.0",
+    "postcss-dir-pseudo-class": "^5.0.0",
+    "postcss-pseudo-class-any-link": "^6.0.0",
+    "react": "^17.0.1",
     "request": "^2.88.2"
   },
   "devDependencies": {
