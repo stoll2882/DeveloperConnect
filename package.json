@@ -1,6 +1,9 @@
 {
   "name": "developerconnect",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.15.x"
+  },
   "description": "Social network for developers",
   "main": "server.js",
   "scripts": {
