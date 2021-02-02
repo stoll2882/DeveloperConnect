@@ -38,6 +38,7 @@
     "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
+    "normalize-url": "^5.3.0",
     "posix-character-classes": "^1.0.0",
     "postcss-dir-pseudo-class": "^5.0.0",
     "postcss-pseudo-class-any-link": "^6.0.0",
