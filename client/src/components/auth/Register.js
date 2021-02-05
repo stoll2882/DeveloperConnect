@@ -3,16 +3,23 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
+import { reCaptchaCheck } from '../../actions/auth';
+
+import FacebookLogin from './FacebookLogin';
+import GoogleLogin from './GmailLogin';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import PropTypes from 'prop-types';
+import { check } from 'express-validator';
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     password2: '',
   });
+  const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
   const { name, email, password, password2 } = formData;
 
@@ -21,11 +28,18 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    var checkbox = document.getElementById('privacypolicy');
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
+    } else if (!privacyPolicyAccepted) {
+      setAlert('Please accept the terms and conditions', 'danger');
     } else {
       register(name, email, password);
     }
+  };
+
+  const captchaChange = (e) => {
+    reCaptchaCheck(e.value);
   };
 
   if (isAuthenticated) {
@@ -38,6 +52,8 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       <p className="lead">
         <i className="fas fa-user"></i> Create Your Account
       </p>
+      <FacebookLogin isChecked={privacyPolicyAccepted} />
+      <GoogleLogin />
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <input
@@ -85,6 +101,24 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             required
           />
         </div>
+        <ReCAPTCHA
+          sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+          onChange={captchaChange}
+        />
+        <br></br>
+        <input
+          type="checkbox"
+          id="privacypolicy"
+          name="privacypolicy"
+          value="privacypolicy"
+          onChange={(e) => setPrivacyPolicyAccepted(!privacyPolicyAccepted)}
+        />{' '}
+        <label for="privacypolicy">
+          I agree to the{' '}
+          <Link to="/privacypolicy">privacy policy and terms of service</Link>
+        </label>
+        <br></br>
+        <br></br>
         <input type="submit" className="btn btn-primary" value="Register" />
       </form>
       <p className="my-1">
@@ -97,6 +131,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  reCaptchaCheck: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
@@ -104,4 +139,6 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { setAlert, register })(Register);
+export default connect(mapStateToProps, { setAlert, register, reCaptchaCheck })(
+  Register
+);
