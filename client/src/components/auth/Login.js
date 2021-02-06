@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
-import FacebookLogin from './FacebookLogin';
+import FacebookReLogin from './FacebookReLogin';
 
 export const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -33,7 +33,7 @@ export const Login = ({ login, isAuthenticated }) => {
       <p className="lead">
         <i className="fas fa-user"></i> Sign Into Your Account
       </p>
-      <FacebookLogin />
+      <FacebookReLogin />
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <input

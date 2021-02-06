@@ -7,17 +7,30 @@ const config = require('config');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
+const FacebookUser = require('../../models/FacebookUser');
 
 // @route    GET api/auth
 // @desc     Get user by token
 // @access   Private
 router.get('/', auth, async (req, res) => {
+  var gotUser = false;
   try {
     const user = await User.findById(req.user.id).select('-password');
+    gotUser = true;
     res.json(user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    // res.status(500).send('Server Error');
+  }
+  if (!gotUser) {
+    try {
+      const user = await FacebookUser.findById(req.facebookuser.fbid);
+      gotUser = true;
+      res.json(user);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   }
 });
 
@@ -34,7 +47,8 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { email, password, fbid } = req.body;
+    var gotUser = false;
 
     try {
       let user = await User.findOne({ email });
@@ -48,6 +62,7 @@ router.post(
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
+        gotUser = true;
         return res
           .status(400)
           .json({ errors: [{ msg: 'Invalid Credentials' }] });
@@ -71,6 +86,46 @@ router.post(
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
+    }
+
+    if (!gotUser) {
+      try {
+        let user = await FacebookUser.findOne({ email });
+
+        if (!user) {
+          return res
+            .status(400)
+            .json({ errors: [{ msg: 'Invalid Credentials' }] });
+        }
+
+        const isMatch = await bcrypt.compare(fbid, user.fbid);
+
+        if (!isMatch) {
+          gotUser = true;
+          return res
+            .status(400)
+            .json({ errors: [{ msg: 'Invalid Credentials' }] });
+        }
+
+        const payload = {
+          user: {
+            id: user.fbid,
+          },
+        };
+
+        jwt.sign(
+          payload,
+          config.get('jwtSecret'),
+          { expiresIn: '5 days' },
+          (err, token) => {
+            if (err) throw err;
+            res.json({ token });
+          }
+        );
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+      }
     }
   }
 );

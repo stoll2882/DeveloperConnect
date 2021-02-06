@@ -14,6 +14,10 @@ const FacebookUserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = FacebookUser = mongoose.model(

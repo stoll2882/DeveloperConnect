@@ -45,7 +45,7 @@ router.post(
       // Encrypt id
       const salt = await bcrypt.genSalt(10);
 
-      user.fbid = await bcrypt.hash(id, salt);
+      user.fbid = await bcrypt.hash(fbid, salt);
 
       // Place await in front of anything that returns a promise
       await user.save();
@@ -53,7 +53,7 @@ router.post(
       // Return jsonWebToken
       const payload = {
         user: {
-          id: user.id,
+          id: user.fbid,
         },
       };
 

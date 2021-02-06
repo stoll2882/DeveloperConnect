@@ -4,7 +4,8 @@ import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import FacebookLoginWithButton from 'react-facebook-login';
 import { setAlert } from '../../actions/alert';
-import { registerFacebook } from '../../actions/auth';
+import { registerFacebook, register } from '../../actions/auth';
+import FinishRegister from './FinishRegister';
 
 const FacebookLogin = ({
   isChecked,
@@ -43,24 +44,31 @@ const FacebookLogin = ({
   );
 
   const facebookResponse = (response) => {
-    // if (!isChecked) {
-    //   setAlert('Please accept the terms and conditions', 'danger');
-    // } else {
     setUserData({
       name: response.name,
       email: response.email,
       id: response.id,
     });
-    registerFacebook(name, email, id);
-    // }
+    // <FinishRegister facebookName={name} email={email} id={id}
+    registerFacebook(response.name, response.email, response.id);
+    // return <Redirect to="/dashboard" />;
   };
 
-  return <Fragment>{name ? <UserScreen /> : <LoginButton />}</Fragment>;
+  return (
+    <Fragment>
+      {name ? (
+        <FinishRegister facebookname={name} email={email} id={id} />
+      ) : (
+        <LoginButton />
+      )}
+    </Fragment>
+  );
 };
 
 FacebookLogin.propTypes = {
   setAlert: PropTypes.func.isRequired,
   registerFacebook: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
@@ -68,6 +76,8 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { setAlert, registerFacebook })(
-  FacebookLogin
-);
+export default connect(mapStateToProps, {
+  setAlert,
+  registerFacebook,
+  register,
+})(FacebookLogin);
