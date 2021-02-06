@@ -37,7 +37,7 @@ export const FacebookReLogin = ({ login, isAuthenticated }) => {
       id: response.id,
     });
 
-    loginFacebook(response.name, response.id);
+    loginFacebook(response.name, null, response.id);
   };
 
   return (

@@ -33,14 +33,18 @@ export const loadUser = () => async (dispatch) => {
 };
 
 // Register User
-export const register = (name, email, password) => async (dispatch) => {
+export const register = (name, email, password, fbid) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
-
-  const body = JSON.stringify({ name, email, password });
+  var body;
+  if (!password) {
+    body = JSON.stringify({ name, email, fbid });
+  } else {
+    body = JSON.stringify({ name, email, password });
+  }
 
   try {
     const res = await axios.post('/api/users', body, config);
@@ -114,14 +118,18 @@ export const reCaptchaCheck = (value) => async (dispatch) => {
 };
 
 // Login User
-export const login = (email, password) => async (dispatch) => {
+export const login = (email, password, fbid) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
-
-  const body = JSON.stringify({ email, password });
+  var body;
+  if (!fbid) {
+    body = JSON.stringify({ email, password });
+  } else {
+    body = JSON.stringify({ email, fbid });
+  }
 
   try {
     const res = await axios.post('/api/auth', body, config);

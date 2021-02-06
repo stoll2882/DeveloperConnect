@@ -77,7 +77,7 @@ const FinishRegister = ({
           value="privacypolicy"
           onChange={(e) => setPrivacyPolicyAccepted(!privacyPolicyAccepted)}
         />{' '}
-        <label for="privacypolicy">
+        <label htmlFor="privacypolicy">
           I agree to the{' '}
           <Link to="/privacypolicy">privacy policy and terms of service</Link>
         </label>

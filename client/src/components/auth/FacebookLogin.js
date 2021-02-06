@@ -50,7 +50,7 @@ const FacebookLogin = ({
       id: response.id,
     });
     // <FinishRegister facebookName={name} email={email} id={id}
-    registerFacebook(response.name, response.email, response.id);
+    register(response.name, response.email, null, response.id);
     // return <Redirect to="/dashboard" />;
   };
 

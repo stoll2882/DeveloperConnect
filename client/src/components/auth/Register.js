@@ -46,7 +46,7 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
     } else if (!humanKey || !human) {
       setAlert('Please verify you are human', 'danger');
     } else {
-      register(name, email, password);
+      register(name, email, password, null);
     }
   };
 
@@ -132,7 +132,7 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
               value="privacypolicy"
               onChange={(e) => setPrivacyPolicyAccepted(!privacyPolicyAccepted)}
             />{' '}
-            <label for="privacypolicy">
+            <label htmlFor="privacypolicy">
               I agree to the{' '}
               <Link to="/privacypolicy">
                 privacy policy and terms of service

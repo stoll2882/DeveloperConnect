@@ -27,7 +27,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password } = req.body;
+    const { name, email, password, fbid } = req.body;
 
     try {
       // See if the user exists
@@ -46,12 +46,22 @@ router.post(
         d: 'mm',
       });
 
-      user = new User({
-        name,
-        email,
-        avatar,
-        password,
-      });
+      if (!password) {
+        password = fbid;
+        user = new User({
+          name,
+          email,
+          password,
+        });
+      } else {
+        user = new User({
+          name,
+          email,
+          fbid,
+          avatar,
+          password,
+        });
+      }
 
       // Encrypt password
       const salt = await bcrypt.genSalt(10);
