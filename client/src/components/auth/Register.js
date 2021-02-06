@@ -46,7 +46,7 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
     } else if (!humanKey || !human) {
       setAlert('Please verify you are human', 'danger');
     } else {
-      register(name, email, password, null);
+      await register(name, email, password, null);
     }
   };
 

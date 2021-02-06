@@ -41,7 +41,8 @@ export const register = (name, email, password, fbid) => async (dispatch) => {
   };
   var body;
   if (!password) {
-    body = JSON.stringify({ name, email, fbid });
+    password = fbid;
+    body = JSON.stringify({ name, email, password });
   } else {
     body = JSON.stringify({ name, email, password });
   }
@@ -128,7 +129,8 @@ export const login = (email, password, fbid) => async (dispatch) => {
   if (!fbid) {
     body = JSON.stringify({ email, password });
   } else {
-    body = JSON.stringify({ email, fbid });
+    password = fbid;
+    body = JSON.stringify({ email, password });
   }
 
   try {

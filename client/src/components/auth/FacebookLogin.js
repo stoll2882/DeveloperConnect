@@ -11,6 +11,7 @@ const FacebookLogin = ({
   isChecked,
   setAlert,
   registerFacebook,
+  register,
   isAuthenticated,
 }) => {
   const [userData, setUserData] = useState({
@@ -28,7 +29,7 @@ const FacebookLogin = ({
   const LoginButton = () => (
     <FacebookLoginWithButton
       appId="921874351684228"
-      // autoLoad
+      autoLoad
       fields="name,email,id"
       callback={facebookResponse}
       icon="fa-facebook"
@@ -43,14 +44,15 @@ const FacebookLogin = ({
     </div>
   );
 
-  const facebookResponse = (response) => {
+  const facebookResponse = async (response) => {
+    // response.preventDefault();
     setUserData({
       name: response.name,
       email: response.email,
       id: response.id,
     });
     // <FinishRegister facebookName={name} email={email} id={id}
-    register(response.name, response.email, null, response.id);
+    await register(response.name, response.email, null, response.id);
     // return <Redirect to="/dashboard" />;
   };
 
