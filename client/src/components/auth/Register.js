@@ -19,7 +19,6 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
     password: '',
     password2: '',
     human: false,
-    humanKey: '',
   });
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
@@ -43,8 +42,8 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
     }
   };
 
-  const verifyCaptcha = (e) => {
-    reCaptchaCheck(e.value);
+  const verifyCaptcha = (response) => {
+    reCaptchaCheck(response);
   };
 
   const expireCaptcha = () => {
@@ -114,6 +113,7 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
             </div>
             <ReCAPTCHA
               sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+              render="explicit"
               onChange={verifyCaptcha}
               onExpired={expireCaptcha}
             />

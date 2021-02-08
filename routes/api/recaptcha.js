@@ -13,7 +13,7 @@ const RECAPTCHA_SERVER_KEY = '6Le2z0oaAAAAAB1WymVKZLa6WU34rzXNYpUZ5iJx';
 // @route   GET api/recaptcha
 // @desc    Check if user is human
 // @access  Private
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
   const humanKey = req.body;
   await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
     method: 'post',
