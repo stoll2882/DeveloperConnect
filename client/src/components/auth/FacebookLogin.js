@@ -4,16 +4,10 @@ import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import FacebookLoginWithButton from 'react-facebook-login';
 import { setAlert } from '../../actions/alert';
-import { registerFacebook, register } from '../../actions/auth';
+import { register } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
 
-const FacebookLogin = ({
-  isChecked,
-  setAlert,
-  registerFacebook,
-  register,
-  isAuthenticated,
-}) => {
+const FacebookLogin = ({ isChecked, setAlert, register, isAuthenticated }) => {
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -21,6 +15,8 @@ const FacebookLogin = ({
   });
 
   const { name, email, id } = userData;
+
+  const type = 'facebook';
 
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
@@ -51,14 +47,12 @@ const FacebookLogin = ({
       email: response.email,
       id: response.id,
     });
-    // <FinishRegister facebookName={name} email={email} id={id}
-    await register(response.name, response.email, null, response.id);
-    // return <Redirect to="/dashboard" />;
+    await register(response.name, response.email, null, type, response.id);
   };
 
   return (
     <Fragment>
-      {name ? (
+      {id ? (
         <FinishRegister facebookname={name} email={email} id={id} />
       ) : (
         <LoginButton />
@@ -69,7 +63,6 @@ const FacebookLogin = ({
 
 FacebookLogin.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  registerFacebook: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
@@ -80,6 +73,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   setAlert,
-  registerFacebook,
   register,
 })(FacebookLogin);

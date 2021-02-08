@@ -27,7 +27,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password } = req.body;
+    const { name, email, password, type, id } = req.body;
 
     try {
       // See if the user exists
@@ -47,21 +47,16 @@ router.post(
       });
 
       if (!password) {
-        password = fbid;
-        user = new User({
-          name,
-          email,
-          password,
-        });
-      } else {
-        user = new User({
-          name,
-          email,
-          fbid,
-          avatar,
-          password,
-        });
+        password = id;
       }
+      user = new User({
+        name,
+        type,
+        id,
+        email,
+        avatar,
+        password,
+      });
 
       // Encrypt password
       const salt = await bcrypt.genSalt(10);
@@ -87,8 +82,6 @@ router.post(
           res.json({ token });
         }
       );
-
-      // res.send('User Registered');
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

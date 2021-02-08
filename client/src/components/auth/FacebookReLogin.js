@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import FacebookLoginWithButton from 'react-facebook-login';
 import PropTypes from 'prop-types';
-import { login, loginFacebook } from '../../actions/auth';
+import { login } from '../../actions/auth';
 import FacebookLogin from './FacebookLogin';
 
 export const FacebookReLogin = ({ login, isAuthenticated }) => {
@@ -37,7 +37,7 @@ export const FacebookReLogin = ({ login, isAuthenticated }) => {
       id: response.id,
     });
 
-    login(response.email, null, response.id);
+    login(response.email, response.id);
   };
 
   return (
@@ -49,7 +49,6 @@ export const FacebookReLogin = ({ login, isAuthenticated }) => {
 
 FacebookReLogin.propTypes = {
   login: PropTypes.func.isRequired,
-  loginFacebook: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
@@ -57,6 +56,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { login, loginFacebook })(
-  FacebookReLogin
-);
+export default connect(mapStateToProps, { login })(FacebookReLogin);

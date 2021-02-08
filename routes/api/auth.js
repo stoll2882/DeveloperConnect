@@ -7,7 +7,6 @@ const config = require('config');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
-const FacebookUser = require('../../models/FacebookUser');
 
 // @route    GET api/auth
 // @desc     Get user by token
@@ -47,7 +46,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, fbid } = req.body;
+    const { email, password } = req.body;
     var gotUser = false;
 
     try {

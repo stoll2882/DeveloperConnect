@@ -18,21 +18,14 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
     email: '',
     password: '',
     password2: '',
-    facebookLogin: false,
     human: false,
     humanKey: '',
   });
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
-  const {
-    name,
-    email,
-    password,
-    password2,
-    facebookLogin,
-    human,
-    humanKey,
-  } = formData;
+  const { name, email, password, password2, human, humanKey } = formData;
+
+  const type = 'self';
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,7 +39,7 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
     } else if (!humanKey || !human) {
       setAlert('Please verify you are human', 'danger');
     } else {
-      await register(name, email, password, null);
+      await register(name, email, password, type, null);
     }
   };
 

@@ -5,7 +5,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  fbid: {
+  type: {
+    type: String,
+    required: true,
+  },
+  id: {
     type: String,
     unique: true,
   },

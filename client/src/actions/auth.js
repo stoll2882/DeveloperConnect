@@ -33,7 +33,9 @@ export const loadUser = () => async (dispatch) => {
 };
 
 // Register User
-export const register = (name, email, password, fbid) => async (dispatch) => {
+export const register = (name, email, password, type, id) => async (
+  dispatch
+) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -41,46 +43,14 @@ export const register = (name, email, password, fbid) => async (dispatch) => {
   };
   var body;
   if (!password) {
-    password = fbid;
-    body = JSON.stringify({ name, email, password });
+    password = id;
+    body = JSON.stringify({ name, email, password, type, id });
   } else {
-    body = JSON.stringify({ name, email, password });
+    body = JSON.stringify({ name, email, password, type });
   }
 
   try {
     const res = await axios.post('/api/users', body, config);
-
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: res.data,
-    });
-
-    dispatch(loadUser());
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-    }
-
-    dispatch({
-      type: REGISTER_FAIL,
-    });
-  }
-};
-
-// Register a user through facebook
-export const registerFacebook = (name, email, fbid) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  const body = JSON.stringify({ name, email, fbid });
-
-  try {
-    const res = await axios.post('/api/facebookusers', body, config);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -119,51 +89,19 @@ export const reCaptchaCheck = (value) => async (dispatch) => {
 };
 
 // Login User
-export const login = (email, password, fbid) => async (dispatch) => {
+export const login = (email, password, id) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
   var body;
-  if (!fbid) {
+  if (!id) {
     body = JSON.stringify({ email, password });
   } else {
-    password = fbid;
+    password = id;
     body = JSON.stringify({ email, password });
   }
-
-  try {
-    const res = await axios.post('/api/auth', body, config);
-    // const res = await axios.post('/api/auth', body);
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data,
-    });
-
-    dispatch(loadUser());
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-    }
-
-    dispatch({
-      type: LOGIN_FAIL,
-    });
-  }
-};
-
-// Login Facebook User
-export const loginFacebook = (email, fbid) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  const body = JSON.stringify({ email, fbid });
 
   try {
     const res = await axios.post('/api/auth', body, config);

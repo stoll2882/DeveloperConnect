@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { registerFacebook } from '../../actions/auth';
+import { register } from '../../actions/auth';
 
 import FacebookLogin from './FacebookLogin';
 import GoogleLogin from './GmailLogin';
@@ -13,7 +13,7 @@ import { check } from 'express-validator';
 
 const FinishRegister = ({
   setAlert,
-  registerFacebook,
+  register,
   isAuthenticated,
   facebookName,
   email,
@@ -35,7 +35,7 @@ const FinishRegister = ({
     if (!privacyPolicyAccepted) {
       setAlert('Please accept the terms and conditions', 'danger');
     } else {
-      registerFacebook(name, email, id);
+      register(name, email, id);
     }
   };
 
@@ -94,7 +94,7 @@ const FinishRegister = ({
 
 FinishRegister.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  registerFacebook: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
@@ -104,5 +104,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   setAlert,
-  registerFacebook,
+  register,
 })(FinishRegister);
