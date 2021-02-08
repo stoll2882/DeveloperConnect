@@ -7,11 +7,15 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
+  RECAPTCHA_APPROVED,
+  RECAPTCHA_EXPIRED,
+  RECAPTCHA_DENIED,
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
+  recaptchaApproved: false,
   loading: true,
   user: null,
 };
@@ -35,6 +39,8 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
       };
+    case RECAPTCHA_DENIED:
+    case RECAPTCHA_EXPIRED:
     case REGISTER_FAIL:
     case LOGIN_FAIL:
     case AUTH_ERROR:
@@ -46,6 +52,11 @@ export default function (state = initialState, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
+        recaptchaApproved: false,
+      };
+    case RECAPTCHA_APPROVED:
+      return {
+        recaptchaApproved: true,
       };
     default:
       return state;

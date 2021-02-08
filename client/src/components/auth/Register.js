@@ -12,7 +12,13 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import PropTypes from 'prop-types';
 import { check } from 'express-validator';
 
-const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
+const Register = ({
+  setAlert,
+  register,
+  reCaptchaCheck,
+  isAuthenticated,
+  recaptchaApproved,
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,7 +41,7 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
       setAlert('Passwords do not match', 'danger');
     } else if (!privacyPolicyAccepted) {
       setAlert('Please accept the terms and conditions', 'danger');
-    } else if (!humanKey || !human) {
+    } else if (human == false) {
       setAlert('Please verify you are human', 'danger');
     } else {
       await register(name, email, password, type, null);
@@ -47,11 +53,14 @@ const Register = ({ setAlert, register, reCaptchaCheck, isAuthenticated }) => {
   };
 
   const expireCaptcha = () => {
-    setFormData({ ...formData, [human]: false, humanKey: null });
+    setFormData({ ...formData, [human]: false });
   };
 
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
+  }
+  if (recaptchaApproved) {
+    human = true;
   }
 
   return (
@@ -151,10 +160,12 @@ Register.propTypes = {
   register: PropTypes.func.isRequired,
   reCaptchaCheck: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  recaptchaApproved: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  recaptchaApproved: state.auth.recaptchaApproved,
 });
 
 export default connect(mapStateToProps, { setAlert, register, reCaptchaCheck })(

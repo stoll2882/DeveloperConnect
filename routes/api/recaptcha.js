@@ -10,28 +10,36 @@ const { check, validationResult } = require('express-validator');
 
 const RECAPTCHA_SERVER_KEY = '6Le2z0oaAAAAAB1WymVKZLa6WU34rzXNYpUZ5iJx';
 
-// @route   GET api/recaptcha
+// @route   POST api/recaptcha
 // @desc    Check if user is human
 // @access  Private
 router.post('/', async (req, res) => {
-  const humanKey = req.body;
-  await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-    method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    },
-    body: `secret=${RECAPTCHA_SERVER_KEY}&response=${humanKey}`,
-  })
-    .then((res) => res.json())
-    .then((json) => json.success)
-    .catch((err) => {
-      throw new Error(`Error in Google Siteverify API. ${err.message}`);
-    });
+  const { value } = req.body;
 
-  if (humanKey === null || !isHuman) {
-    throw new Error(`YOU ARE NOT A HUMAN.`);
+  try {
+    var googleResponse = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify`,
+      {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        },
+        body: `secret=${RECAPTCHA_SERVER_KEY}&response=${value}`,
+      }
+    );
+    var googleResponseContents = await googleResponse.json();
+    console.log(googleResponseContents);
+    var isHuman = googleResponseContents.success;
+    if (isHuman) {
+      res.status(200).end();
+    } else {
+      res.status(401).send('You are a robot, go away').end();
+    }
+  } catch (err) {
+    console.log('ERROR calling Siteverify ' + err);
+    res.status(500).send('Error calling google siteverify API').end();
   }
-
-  console.log('SUCCESS!');
 });
+
+module.exports = router;

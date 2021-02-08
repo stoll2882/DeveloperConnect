@@ -25,7 +25,6 @@ const FacebookLogin = ({ isChecked, setAlert, register, isAuthenticated }) => {
   const LoginButton = () => (
     <FacebookLoginWithButton
       appId="921874351684228"
-      autoLoad
       fields="name,email,id"
       callback={facebookResponse}
       icon="fa-facebook"

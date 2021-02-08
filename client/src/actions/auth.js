@@ -9,6 +9,8 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_PROFILE,
+  RECAPTCHA_APPROVED,
+  RECAPTCHA_DENIED,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -73,18 +75,23 @@ export const register = (name, email, password, type, id) => async (
 
 // Check if user is human
 export const reCaptchaCheck = (value) => async (dispatch) => {
-  const body = value;
+  const body = JSON.stringify({ value });
 
   try {
-    const res = await axios.post('/api/recaptcha', body);
+    await axios.post('/api/recaptcha', body);
 
-    res.status.send(100);
+    dispatch({
+      type: RECAPTCHA_APPROVED,
+    });
   } catch (err) {
     const errors = err.response.data.errors;
 
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
+    dispatch({
+      type: RECAPTCHA_DENIED,
+    });
   }
 };
 
