@@ -11,6 +11,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 
 import PropTypes from 'prop-types';
 import { check } from 'express-validator';
+import PrivacyPolicy from './PrivacyNotice';
 
 const FinishRegister = ({
   facebookName,
@@ -25,6 +26,7 @@ const FinishRegister = ({
     phoneNumber: '',
   });
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
 
   const { alias, phoneNumber } = formData;
 
@@ -49,10 +51,14 @@ const FinishRegister = ({
     window.location.reload();
   };
 
+  const conditionsClicked = () => {
+    setShowPrivacyPolicy(!showPrivacyPolicy);
+  };
+
   return (
     <Fragment>
       <button className="btn" onClick={backClicked}>
-        Back
+        Cancel
       </button>
       <br></br>
       <br></br>
@@ -61,25 +67,6 @@ const FinishRegister = ({
       <h2>Email: {email}</h2>
       {/* <h2>{id}</h2> */}
       <form className="form" onSubmit={(e) => onSubmit(e)}>
-        {/* <div className="form-group">
-          <input
-            type="text"
-            placeholder="What would you like to be called?"
-            name="name"
-            value={alias}
-            onChange={(e) => onChange(e)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <input
-            placeholder="Enter Phone Number"
-            name="phoneNumber"
-            value={phoneNumber}
-            onChange={(e) => onChange(e)}
-            required
-          />
-        </div> */}
         <br></br>
         <input
           type="checkbox"
@@ -90,7 +77,10 @@ const FinishRegister = ({
         />{' '}
         <label htmlFor="privacypolicy">
           I agree to the{' '}
-          <Link to="/privacypolicy">privacy policy and terms of service</Link>
+          <Link onClick={conditionsClicked}>
+            privacy policy and terms of service
+          </Link>
+          {/* <Link to="/privacypolicy">privacy policy and terms of service</Link> */}
         </label>
         <br></br>
         <br></br>
@@ -99,6 +89,7 @@ const FinishRegister = ({
       <p className="my-1">
         {/* Already have an account? <Link to="/login">Sign In</Link> */}
       </p>
+      {showPrivacyPolicy == true && <PrivacyPolicy />}
     </Fragment>
   );
 };

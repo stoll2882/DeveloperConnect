@@ -43,8 +43,6 @@ export default function (state = initialState, action) {
         loading: false,
         facebookAttempted: false,
       };
-    case RECAPTCHA_DENIED:
-    case RECAPTCHA_EXPIRED:
     case REGISTER_FAIL:
     case LOGIN_FAIL:
     case AUTH_ERROR:
@@ -56,8 +54,13 @@ export default function (state = initialState, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
-        recaptchaApproved: false,
         facebookAttempted: false,
+      };
+    case RECAPTCHA_EXPIRED:
+    case RECAPTCHA_DENIED:
+      return {
+        ...state,
+        recaptchaApproved: false,
       };
     case RECAPTCHA_APPROVED:
       return {

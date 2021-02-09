@@ -62,6 +62,8 @@ const Register = ({
     }
   };
 
+  const recaptchaRef = React.createRef();
+
   const verifyCaptcha = (response) => {
     reCaptchaCheck(response);
   };
@@ -157,6 +159,7 @@ const Register = ({
               />
             </div>
             <ReCAPTCHA
+              ref={recaptchaRef}
               sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
               render="explicit"
               onChange={verifyCaptcha}
