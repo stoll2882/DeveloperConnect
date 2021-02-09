@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
+import PhoneInput from 'react-phone-number-input';
 
 import FacebookLogin from './FacebookLogin';
 import GoogleLogin from './GmailLogin';
@@ -18,6 +19,7 @@ const FinishRegister = ({
   facebookName,
   email,
   id,
+  tempName,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -35,7 +37,8 @@ const FinishRegister = ({
     if (!privacyPolicyAccepted) {
       setAlert('Please accept the terms and conditions', 'danger');
     } else {
-      register(name, email, id);
+      const type = 'facebook';
+      register(facebookName, email, null, type, id);
     }
   };
 
@@ -46,8 +49,9 @@ const FinishRegister = ({
   return (
     <Fragment>
       <h1 className="large text-primary">You're almost there...</h1>
-      <FacebookLogin isChecked={privacyPolicyAccepted} />
-      <GoogleLogin />
+      <h2>{tempName}</h2>
+      <h2>{email}</h2>
+      <h2>{id}</h2>
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <input
@@ -60,9 +64,8 @@ const FinishRegister = ({
           />
         </div>
         <div className="form-group">
-          <input
-            type="phone"
-            placeholder="Phone Number"
+          <PhoneInput
+            placeholder="Enter Phone Number"
             name="phoneNumber"
             value={phoneNumber}
             onChange={(e) => onChange(e)}

@@ -11,8 +11,10 @@ import {
   CLEAR_PROFILE,
   RECAPTCHA_APPROVED,
   RECAPTCHA_DENIED,
+  FACEBOOK_REGISTER_ATTEMPTED,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
+import { Fragment } from 'react';
 
 // Load User
 export const loadUser = () => async (dispatch) => {
@@ -43,6 +45,11 @@ export const register = (name, email, password, type, id) => async (
       'Content-Type': 'application/json',
     },
   };
+  if (type == 'facebook') {
+    dispatch({
+      type: FACEBOOK_REGISTER_ATTEMPTED,
+    });
+  }
   var body;
   if (!password) {
     password = id;

@@ -10,12 +10,14 @@ import {
   RECAPTCHA_APPROVED,
   RECAPTCHA_EXPIRED,
   RECAPTCHA_DENIED,
+  FACEBOOK_REGISTER_ATTEMPTED,
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   recaptchaApproved: false,
+  facebookAttempted: false,
   loading: true,
   user: null,
 };
@@ -29,6 +31,7 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         user: payload,
+        facebookAttempted: false,
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
@@ -38,6 +41,7 @@ export default function (state = initialState, action) {
         ...payload,
         isAuthenticated: true,
         loading: false,
+        facebookAttempted: false,
       };
     case RECAPTCHA_DENIED:
     case RECAPTCHA_EXPIRED:
@@ -53,10 +57,17 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         loading: false,
         recaptchaApproved: false,
+        facebookAttempted: false,
       };
     case RECAPTCHA_APPROVED:
       return {
+        ...state,
         recaptchaApproved: true,
+      };
+    case FACEBOOK_REGISTER_ATTEMPTED:
+      return {
+        ...state,
+        facebookAttempted: true,
       };
     default:
       return state;

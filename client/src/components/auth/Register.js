@@ -18,6 +18,7 @@ const Register = ({
   reCaptchaCheck,
   isAuthenticated,
   recaptchaApproved,
+  facebookAttempted,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -65,13 +66,13 @@ const Register = ({
 
   return (
     <Fragment>
-      {!isAuthenticated ? (
+      {!facebookAttempted ? (
         <Fragment>
           <h1 className="large text-primary">Sign Up</h1>
           <p className="lead">
             <i className="fas fa-user"></i> Create Your Account
           </p>
-          <FacebookLogin isChecked={privacyPolicyAccepted} />
+          <FacebookLogin />
           <GoogleLogin />
           <form className="form" onSubmit={(e) => onSubmit(e)}>
             <div className="form-group">
@@ -149,7 +150,7 @@ const Register = ({
           </p>
         </Fragment>
       ) : (
-        <FacebookLogin isChecked={privacyPolicyAccepted} />
+        <FacebookLogin />
       )}
     </Fragment>
   );
@@ -161,11 +162,13 @@ Register.propTypes = {
   reCaptchaCheck: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   recaptchaApproved: PropTypes.bool,
+  facebookAttempted: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   recaptchaApproved: state.auth.recaptchaApproved,
+  facebookAttempted: state.auth.facebookAttempted,
 });
 
 export default connect(mapStateToProps, { setAlert, register, reCaptchaCheck })(

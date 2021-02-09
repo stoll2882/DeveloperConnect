@@ -8,13 +8,16 @@ import { register } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
 
 const FacebookLogin = ({ isChecked, setAlert, register, isAuthenticated }) => {
-  const [userData, setUserData] = useState({
+  var [userData, setUserData] = useState({
     name: '',
     email: '',
     id: '',
   });
 
-  const { name, email, id } = userData;
+  var { name, email, id } = userData;
+  var tempName;
+  var tempEmail;
+  var tempID;
 
   const type = 'facebook';
 
@@ -41,18 +44,21 @@ const FacebookLogin = ({ isChecked, setAlert, register, isAuthenticated }) => {
 
   const facebookResponse = async (response) => {
     // response.preventDefault();
-    setUserData({
-      name: response.name,
-      email: response.email,
-      id: response.id,
-    });
+    // setUserData({
+    //   name: response.name,
+    //   email: response.email,
+    //   id: response.id,
+    // });
+    // tempName = response.name;
+    // tempEmail = response.email;
+    // tempID = response.id;
     await register(response.name, response.email, null, type, response.id);
   };
 
   return (
     <Fragment>
       {id ? (
-        <FinishRegister facebookname={name} email={email} id={id} />
+        <FinishRegister facebookname={tempName} email={tempEmail} id={tempID} />
       ) : (
         <LoginButton />
       )}
