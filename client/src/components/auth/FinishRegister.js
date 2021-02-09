@@ -13,21 +13,20 @@ import PropTypes from 'prop-types';
 import { check } from 'express-validator';
 
 const FinishRegister = ({
-  tempName,
-  setAlert,
-  register,
-  isAuthenticated,
   facebookName,
   email,
   id,
+  setAlert,
+  register,
+  isAuthenticated,
 }) => {
   const [formData, setFormData] = useState({
-    name: '',
+    alias: '',
     phoneNumber: '',
   });
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
-  const { name, phoneNumber } = formData;
+  const { alias, phoneNumber } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,32 +45,41 @@ const FinishRegister = ({
     return <Redirect to="/dashboard" />;
   }
 
+  const backClicked = () => {
+    window.location.reload();
+  };
+
   return (
     <Fragment>
+      <button className="btn" onClick={backClicked}>
+        Back
+      </button>
+      <br></br>
+      <br></br>
       <h1 className="large text-primary">You're almost there...</h1>
-      <h2>{tempName}</h2>
-      <h2>{email}</h2>
-      <h2>{id}</h2>
+      <h2>Name: {facebookName}</h2>
+      <h2>Email: {email}</h2>
+      {/* <h2>{id}</h2> */}
       <form className="form" onSubmit={(e) => onSubmit(e)}>
-        <div className="form-group">
+        {/* <div className="form-group">
           <input
             type="text"
             placeholder="What would you like to be called?"
             name="name"
-            value={name}
+            value={alias}
             onChange={(e) => onChange(e)}
             required
           />
         </div>
         <div className="form-group">
-          <PhoneInput
+          <input
             placeholder="Enter Phone Number"
             name="phoneNumber"
             value={phoneNumber}
             onChange={(e) => onChange(e)}
             required
           />
-        </div>
+        </div> */}
         <br></br>
         <input
           type="checkbox"
@@ -89,7 +97,7 @@ const FinishRegister = ({
         <input type="submit" className="btn btn-primary" value="Register" />
       </form>
       <p className="my-1">
-        Already have an account? <Link to="/login">Sign In</Link>
+        {/* Already have an account? <Link to="/login">Sign In</Link> */}
       </p>
     </Fragment>
   );

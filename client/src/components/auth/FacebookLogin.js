@@ -4,26 +4,19 @@ import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import FacebookLoginWithButton from 'react-facebook-login';
 import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
+import { register, attemptFacebook } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
 
 const FacebookLogin = ({
-  privacyPolicyAccepted,
   setAlert,
   register,
   isAuthenticated,
   facebookAttempted,
+  attemptFacebook,
 }) => {
-  const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    id: '',
-  });
-
-  const { name, email, id } = userData;
-  var tempName;
-  var tempEmail;
-  var tempID;
+  var [name, setName] = useState('');
+  var [email, setEmail] = useState('');
+  var [id, setId] = useState('');
 
   const type = 'facebook';
 
@@ -31,50 +24,54 @@ const FacebookLogin = ({
     return <Redirect to="/dashboard" />;
   }
 
-  const facebookClicked = () => {
-    // if (!privacyPolicyAccepted) {
-    //   setAlert(
-    //     'Please accept the terms and conditions before registering with facebook',
-    //     'danger'
-    //   );
-    // }
-  };
-
   const LoginButton = () => (
     <FacebookLoginWithButton
       appId="921874351684228"
       fields="name,email,id"
       callback={facebookResponse}
       icon="fa-facebook"
-      onClick={facebookClicked}
+      // onClick={facebookClicked}
     />
   );
 
-  const UserScreen = () => (
-    <div>
-      <h1>Welcome {name}!</h1>
-      <p>{email}</p>
-      <p>{id}</p>
-    </div>
-  );
+  // const facebookClicked = () => {
+  //   return (
+  //     <Redirect
+  //       to={{
+  //         pathname: '/finishregister',
+  //         state: { facebookName: { name }, email: { email }, id: { id } },
+  //       }}
+  //     />
+  //   );
+  // };
 
-  const facebookResponse = (response) => {
-    // response.preventDefault();
-    if (facebookAttempted) {
-      const firstVal = 'name';
-      const secondVal = 'email';
-      const thirdVal = 'id';
-      setUserData({ ...userData, [firstVal]: response.name });
-      setUserData({ ...userData, [secondVal]: response.email });
-      setUserData({ ...userData, [thirdVal]: response.id });
-      console.log('setdata');
-    }
-    register(response.name, response.email, null, type, response.id);
+  const facebookResponse = async (response) => {
+    setName(response.name);
+    setEmail(response.email);
+    setId(response.id);
   };
+
+  // if (name) {
+  //   return (
+  //     <Redirect
+  //       to={{
+  //         pathname: '/finishregister',
+  //         state: { facebookName: { name }, email, id },
+  //         // state: { facebookName: { name }, email: { email }, id: { id } },
+  //       }}
+  //     />
+  //   );
+  // }
 
   return (
     <Fragment>
-      {name ? <FinishRegister props={(name, email, id)} /> : <LoginButton />}
+      {/* <LoginButton /> */}
+      <h1>name is... {name}</h1>
+      {name ? (
+        <FinishRegister facebookName={name} email={email} id={id} />
+      ) : (
+        <LoginButton />
+      )}
     </Fragment>
   );
 };
@@ -84,6 +81,7 @@ FacebookLogin.propTypes = {
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   facebookAttempted: PropTypes.bool,
+  attemptFacebook: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -94,4 +92,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   setAlert,
   register,
+  attemptFacebook,
 })(FacebookLogin);

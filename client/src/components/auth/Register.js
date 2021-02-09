@@ -2,8 +2,10 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
+import { register, attemptFacebook } from '../../actions/auth';
+import FacebookLoginWithButton from 'react-facebook-login';
 import { reCaptchaCheck } from '../../actions/auth';
+import FinishRegister from './FinishRegister';
 
 import FacebookLogin from './FacebookLogin';
 import GoogleLogin from './GmailLogin';
@@ -15,6 +17,7 @@ import { check } from 'express-validator';
 const Register = ({
   setAlert,
   register,
+  attemptFacebook,
   reCaptchaCheck,
   isAuthenticated,
   recaptchaApproved,
@@ -25,10 +28,19 @@ const Register = ({
     email: '',
     password: '',
     password2: '',
+    id: '',
+    facebookOption: false,
   });
+
+  const [userData, setUserData] = useState({
+    fbName: 'name',
+    fbEmail: 'email',
+    fbId: 'id',
+  });
+
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
-  const { name, email, password, password2 } = formData;
+  const { name, email, password, password2, id, facebookOption } = formData;
 
   var human = recaptchaApproved;
 
@@ -62,6 +74,29 @@ const Register = ({
     return <Redirect to="/dashboard" />;
   }
 
+  const facebookChosen = () => {
+    setFormData({ facebookOption: true });
+  };
+
+  const FacebookLoginButton = () => (
+    <FacebookLoginWithButton
+      appId="921874351684228"
+      fields="name,email,id"
+      callback={facebookResponse}
+      icon="fa-facebook"
+      // onClick={facebookClicked}
+    />
+  );
+
+  const facebookResponse = async (response) => {
+    await attemptFacebook();
+    setFormData({
+      name: response.name,
+      email: response.email,
+      id: response.id,
+    });
+  };
+
   return (
     <Fragment>
       {!facebookAttempted ? (
@@ -70,7 +105,7 @@ const Register = ({
           <p className="lead">
             <i className="fas fa-user"></i> Create Your Account
           </p>
-          <FacebookLogin props={privacyPolicyAccepted} />
+          <FacebookLoginButton onChange={facebookChosen} />
           <GoogleLogin />
           <form className="form" onSubmit={(e) => onSubmit(e)}>
             <div className="form-group">
@@ -78,6 +113,7 @@ const Register = ({
                 type="text"
                 placeholder="Name"
                 name="name"
+                id="namefield"
                 value={name}
                 onChange={(e) => onChange(e)}
                 required
@@ -88,6 +124,7 @@ const Register = ({
                 type="email"
                 placeholder="Email Address"
                 name="email"
+                id="emailfield"
                 value={email}
                 onChange={(e) => onChange(e)}
                 required
@@ -148,7 +185,7 @@ const Register = ({
           </p>
         </Fragment>
       ) : (
-        <FacebookLogin />
+        <FinishRegister facebookName={name} email={email} id={id} />
       )}
     </Fragment>
   );
@@ -157,6 +194,7 @@ const Register = ({
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  attemptFacebook: PropTypes.func.isRequired,
   reCaptchaCheck: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   recaptchaApproved: PropTypes.bool,
@@ -169,6 +207,9 @@ const mapStateToProps = (state) => ({
   facebookAttempted: state.auth.facebookAttempted,
 });
 
-export default connect(mapStateToProps, { setAlert, register, reCaptchaCheck })(
-  Register
-);
+export default connect(mapStateToProps, {
+  setAlert,
+  register,
+  reCaptchaCheck,
+  attemptFacebook,
+})(Register);

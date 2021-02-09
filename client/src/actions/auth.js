@@ -36,6 +36,12 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
+export const attemptFacebook = () => (dispatch) => {
+  dispatch({
+    type: FACEBOOK_REGISTER_ATTEMPTED,
+  });
+};
+
 // Register User
 export const register = (name, email, password, type, id) => async (
   dispatch
