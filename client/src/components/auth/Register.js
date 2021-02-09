@@ -25,11 +25,12 @@ const Register = ({
     email: '',
     password: '',
     password2: '',
-    human: false,
   });
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
-  const { name, email, password, password2, human, humanKey } = formData;
+  const { name, email, password, password2 } = formData;
+
+  var human = recaptchaApproved;
 
   const type = 'self';
 
@@ -54,14 +55,11 @@ const Register = ({
   };
 
   const expireCaptcha = () => {
-    setFormData({ ...formData, [human]: false });
+    setFormData({ ...formData, human: false });
   };
 
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
-  }
-  if (recaptchaApproved) {
-    human = true;
   }
 
   return (
@@ -72,7 +70,7 @@ const Register = ({
           <p className="lead">
             <i className="fas fa-user"></i> Create Your Account
           </p>
-          <FacebookLogin />
+          <FacebookLogin props={privacyPolicyAccepted} />
           <GoogleLogin />
           <form className="form" onSubmit={(e) => onSubmit(e)}>
             <div className="form-group">

@@ -13,13 +13,13 @@ import PropTypes from 'prop-types';
 import { check } from 'express-validator';
 
 const FinishRegister = ({
+  tempName,
   setAlert,
   register,
   isAuthenticated,
   facebookName,
   email,
   id,
-  tempName,
 }) => {
   const [formData, setFormData] = useState({
     name: '',

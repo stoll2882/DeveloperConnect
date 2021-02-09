@@ -7,14 +7,20 @@ import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
 
-const FacebookLogin = ({ isChecked, setAlert, register, isAuthenticated }) => {
-  var [userData, setUserData] = useState({
+const FacebookLogin = ({
+  privacyPolicyAccepted,
+  setAlert,
+  register,
+  isAuthenticated,
+  facebookAttempted,
+}) => {
+  const [userData, setUserData] = useState({
     name: '',
     email: '',
     id: '',
   });
 
-  var { name, email, id } = userData;
+  const { name, email, id } = userData;
   var tempName;
   var tempEmail;
   var tempID;
@@ -25,12 +31,22 @@ const FacebookLogin = ({ isChecked, setAlert, register, isAuthenticated }) => {
     return <Redirect to="/dashboard" />;
   }
 
+  const facebookClicked = () => {
+    // if (!privacyPolicyAccepted) {
+    //   setAlert(
+    //     'Please accept the terms and conditions before registering with facebook',
+    //     'danger'
+    //   );
+    // }
+  };
+
   const LoginButton = () => (
     <FacebookLoginWithButton
       appId="921874351684228"
       fields="name,email,id"
       callback={facebookResponse}
       icon="fa-facebook"
+      onClick={facebookClicked}
     />
   );
 
@@ -42,26 +58,23 @@ const FacebookLogin = ({ isChecked, setAlert, register, isAuthenticated }) => {
     </div>
   );
 
-  const facebookResponse = async (response) => {
+  const facebookResponse = (response) => {
     // response.preventDefault();
-    // setUserData({
-    //   name: response.name,
-    //   email: response.email,
-    //   id: response.id,
-    // });
-    // tempName = response.name;
-    // tempEmail = response.email;
-    // tempID = response.id;
-    await register(response.name, response.email, null, type, response.id);
+    if (facebookAttempted) {
+      const firstVal = 'name';
+      const secondVal = 'email';
+      const thirdVal = 'id';
+      setUserData({ ...userData, [firstVal]: response.name });
+      setUserData({ ...userData, [secondVal]: response.email });
+      setUserData({ ...userData, [thirdVal]: response.id });
+      console.log('setdata');
+    }
+    register(response.name, response.email, null, type, response.id);
   };
 
   return (
     <Fragment>
-      {id ? (
-        <FinishRegister facebookname={tempName} email={tempEmail} id={tempID} />
-      ) : (
-        <LoginButton />
-      )}
+      {name ? <FinishRegister props={(name, email, id)} /> : <LoginButton />}
     </Fragment>
   );
 };
@@ -70,10 +83,12 @@ FacebookLogin.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  facebookAttempted: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  facebookAttempted: state.auth.facbookAttempted,
 });
 
 export default connect(mapStateToProps, {

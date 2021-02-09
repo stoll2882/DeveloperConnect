@@ -82,7 +82,7 @@ export const register = (name, email, password, type, id) => async (
 
 // Check if user is human
 export const reCaptchaCheck = (value) => async (dispatch) => {
-  const body = JSON.stringify({ value });
+  const body = { value: value };
 
   try {
     await axios.post('/api/recaptcha', body);
@@ -91,11 +91,6 @@ export const reCaptchaCheck = (value) => async (dispatch) => {
       type: RECAPTCHA_APPROVED,
     });
   } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-    }
     dispatch({
       type: RECAPTCHA_DENIED,
     });
