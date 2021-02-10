@@ -12,6 +12,7 @@ import {
   RECAPTCHA_APPROVED,
   RECAPTCHA_DENIED,
   FACEBOOK_REGISTER_ATTEMPTED,
+  RECAPTCHA_EXPIRED,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { Fragment } from 'react';
@@ -101,6 +102,12 @@ export const reCaptchaCheck = (value) => async (dispatch) => {
       type: RECAPTCHA_DENIED,
     });
   }
+};
+
+export const dispatchExpireCaptcha = () => (dispatch) => {
+  dispatch({
+    type: RECAPTCHA_EXPIRED,
+  });
 };
 
 // Login User

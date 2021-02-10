@@ -2,7 +2,11 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { register, attemptFacebook } from '../../actions/auth';
+import {
+  register,
+  attemptFacebook,
+  dispatchExpireCaptcha,
+} from '../../actions/auth';
 import FacebookLoginWithButton from 'react-facebook-login';
 import { reCaptchaCheck } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
@@ -19,6 +23,7 @@ const Register = ({
   register,
   attemptFacebook,
   reCaptchaCheck,
+  dispatchExpireCaptcha,
   isAuthenticated,
   recaptchaApproved,
   facebookAttempted,
@@ -69,6 +74,7 @@ const Register = ({
   };
 
   const expireCaptcha = () => {
+    dispatchExpireCaptcha();
     setFormData({ ...formData, human: false });
   };
 
@@ -200,6 +206,7 @@ Register.propTypes = {
   attemptFacebook: PropTypes.func.isRequired,
   reCaptchaCheck: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  dispatchExpireCaptcha: PropTypes.func.isRequired,
   recaptchaApproved: PropTypes.bool,
   facebookAttempted: PropTypes.bool,
 };
@@ -215,4 +222,5 @@ export default connect(mapStateToProps, {
   register,
   reCaptchaCheck,
   attemptFacebook,
+  dispatchExpireCaptcha,
 })(Register);
