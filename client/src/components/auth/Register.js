@@ -10,13 +10,10 @@ import {
 import FacebookLoginWithButton from 'react-facebook-login';
 import { reCaptchaCheck } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
-
 import FacebookLogin from './FacebookLogin';
 import GoogleLogin from './GmailLogin';
 import ReCAPTCHA from 'react-google-recaptcha';
-
 import PropTypes from 'prop-types';
-import { check } from 'express-validator';
 
 const Register = ({
   setAlert,

@@ -3,12 +3,14 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createProfile, getCurrentProfile } from '../../actions/profile';
+import { setAlert } from '../../actions/alert';
 
 const EditProfile = ({
   profile: { profile, loading },
   createProfile,
   getCurrentProfile,
   history,
+  setAlert,
 }) => {
   const [formData, setFormData] = useState({
     company: '',
@@ -64,6 +66,22 @@ const EditProfile = ({
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const [validSocialLinks, setValidSocialLinks] = useState({
+    youtubeValid: false,
+    // twitterValid: false,
+    // facebookValid: false,
+    // linkedinValid: false,
+    // instagramValid: false
+  });
+
+  const {
+    youtubeValid,
+    // twitterValid,
+    // facebookValid,
+    // linkedinValid,
+    // instagramValid
+  } = validSocialLinks;
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -249,12 +267,15 @@ EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
+  setAlert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   profile: state.profile,
 });
 
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-  withRouter(EditProfile)
-);
+export default connect(mapStateToProps, {
+  createProfile,
+  getCurrentProfile,
+  setAlert,
+})(withRouter(EditProfile));

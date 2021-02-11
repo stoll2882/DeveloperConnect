@@ -5,8 +5,14 @@ import FacebookLoginWithButton from 'react-facebook-login';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
 import FacebookLogin from './FacebookLogin';
+import { setAlert } from '../../actions/alert';
 
-export const FacebookReLogin = ({ login, isAuthenticated }) => {
+export const FacebookReLogin = ({
+  login,
+  isAuthenticated,
+  setAlert,
+  recaptchaApproved,
+}) => {
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -14,6 +20,8 @@ export const FacebookReLogin = ({ login, isAuthenticated }) => {
   });
 
   const { name, email, id } = userData;
+
+  var human = recaptchaApproved;
 
   // Redirect if logged in
   if (isAuthenticated) {
@@ -36,7 +44,11 @@ export const FacebookReLogin = ({ login, isAuthenticated }) => {
       email: response.email,
       id: response.id,
     });
-    login(response.email, null, response.id);
+    if (human == false) {
+      setAlert('Please verify you are human', 'danger');
+    } else {
+      login(response.email, null, response.id);
+    }
   };
 
   return (
@@ -49,10 +61,13 @@ export const FacebookReLogin = ({ login, isAuthenticated }) => {
 FacebookReLogin.propTypes = {
   login: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  setAlert: PropTypes.func.isRequired,
+  recaptchaApproved: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  recaptchaApproved: state.auth.recaptchaApproved,
 });
 
-export default connect(mapStateToProps, { login })(FacebookReLogin);
+export default connect(mapStateToProps, { login, setAlert })(FacebookReLogin);

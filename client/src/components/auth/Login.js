@@ -3,10 +3,24 @@ import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from '../../actions/auth';
+import { login, dispatchExpireCaptcha } from '../../actions/auth';
 import FacebookReLogin from './FacebookReLogin';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { reCaptchaCheck } from '../../actions/auth';
+import { setAlert } from '../../actions/alert';
 
-export const Login = ({ login, isAuthenticated }) => {
+export const Login = ({
+  login,
+  isAuthenticated,
+  facebookAttempted,
+  recaptchaApproved,
+  dispatchExpireCaptcha,
+  reCaptchaCheck,
+  setAlert,
+}) => {
+  if (facebookAttempted) {
+    window.location.reload();
+  }
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,12 +28,27 @@ export const Login = ({ login, isAuthenticated }) => {
 
   const { email, password } = formData;
 
+  var human = recaptchaApproved;
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    login(email, password, null);
+    if (human == false) {
+      setAlert('Please verify you are human', 'danger');
+    } else {
+      login(email, password, null);
+    }
+  };
+
+  const verifyCaptcha = (response) => {
+    reCaptchaCheck(response);
+  };
+
+  const expireCaptcha = () => {
+    dispatchExpireCaptcha();
+    setFormData({ ...formData, human: false });
   };
 
   // Redirect if logged in
@@ -56,6 +85,13 @@ export const Login = ({ login, isAuthenticated }) => {
             required
           />
         </div>
+        <ReCAPTCHA
+          sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+          render="explicit"
+          onChange={verifyCaptcha}
+          onExpired={expireCaptcha}
+        />
+        <br></br>
         <input type="submit" className="btn btn-primary" value="Login" />
       </form>
       <p className="my-1">
@@ -68,10 +104,22 @@ export const Login = ({ login, isAuthenticated }) => {
 Login.propTypes = {
   login: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  facebookAttempted: PropTypes.bool,
+  reCaptchaCheck: PropTypes.func.isRequired,
+  dispatchExpireCaptcha: PropTypes.func.isRequired,
+  recaptchaApproved: PropTypes.bool,
+  setAlert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  facebookAttempted: state.auth.facebookAttempted,
+  recaptchaApproved: state.auth.recaptchaApproved,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, {
+  login,
+  reCaptchaCheck,
+  dispatchExpireCaptcha,
+  setAlert,
+})(Login);

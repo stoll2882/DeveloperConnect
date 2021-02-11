@@ -2,15 +2,15 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
+import { register, dispatchExpireCaptcha } from '../../actions/auth';
 import PhoneInput from 'react-phone-number-input';
 
 import FacebookLogin from './FacebookLogin';
 import GoogleLogin from './GmailLogin';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { reCaptchaCheck } from '../../actions/auth';
 
 import PropTypes from 'prop-types';
-import { check } from 'express-validator';
 import PrivacyPolicy from './PrivacyNotice';
 
 const FinishRegister = ({
@@ -20,6 +20,9 @@ const FinishRegister = ({
   setAlert,
   register,
   isAuthenticated,
+  dispatchExpireCaptcha,
+  recaptchaApproved,
+  reCaptchaCheck,
 }) => {
   const [formData, setFormData] = useState({
     alias: '',
@@ -30,13 +33,26 @@ const FinishRegister = ({
 
   const { alias, phoneNumber } = formData;
 
+  var human = recaptchaApproved;
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const verifyCaptcha = (response) => {
+    reCaptchaCheck(response);
+  };
+
+  const expireCaptcha = () => {
+    dispatchExpireCaptcha();
+    setFormData({ ...formData, human: false });
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!privacyPolicyAccepted) {
       setAlert('Please accept the terms and conditions', 'danger');
+    } else if (human == false) {
+      setAlert('Please verify you are human', 'danger');
     } else {
       const type = 'facebook';
       register(facebookName, email, null, type, id);
@@ -84,6 +100,13 @@ const FinishRegister = ({
         </label>
         <br></br>
         <br></br>
+        <ReCAPTCHA
+          sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+          render="explicit"
+          onChange={verifyCaptcha}
+          onExpired={expireCaptcha}
+        />
+        <br></br>
         <input type="submit" className="btn btn-primary" value="Register" />
       </form>
       <p className="my-1">
@@ -98,13 +121,19 @@ FinishRegister.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  reCaptchaCheck: PropTypes.func.isRequired,
+  dispatchExpireCaptcha: PropTypes.func.isRequired,
+  recaptchaApproved: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  recaptchaApproved: state.auth.recaptchaApproved,
 });
 
 export default connect(mapStateToProps, {
   setAlert,
   register,
+  reCaptchaCheck,
+  dispatchExpireCaptcha,
 })(FinishRegister);
