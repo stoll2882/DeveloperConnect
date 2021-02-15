@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createProfile, getCurrentProfile } from '../../actions/profile';
 import { setAlert } from '../../actions/alert';
+import Select from 'react-select';
+import countryList from 'react-select-country-list';
 
 const EditProfile = ({
   profile: { profile, loading },
@@ -183,7 +185,6 @@ const EditProfile = ({
           ></textarea>
           <small className="form-text">Tell us a little about yourself</small>
         </div>
-
         <div className="my-2">
           <button
             onClick={() => toggleSocialInputs(!displaySocialInputs)}

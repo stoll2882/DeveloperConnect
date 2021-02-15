@@ -574,4 +574,7 @@ button {
   .post button {
     padding: 0.3rem 0.4rem;
   }
+  .register-button {
+    border-radius: 10px;
+  }
 }

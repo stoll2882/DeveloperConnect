@@ -58,7 +58,7 @@ export const Login = ({
 
   return (
     <Fragment>
-      <h1 className="large text-primary">Sign In</h1>
+      <h1 className="large text-primary">Login</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Sign Into Your Account
       </p>

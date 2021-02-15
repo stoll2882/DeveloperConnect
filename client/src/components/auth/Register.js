@@ -8,12 +8,14 @@ import {
   dispatchExpireCaptcha,
 } from '../../actions/auth';
 import FacebookLoginWithButton from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 import { reCaptchaCheck } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
 import FacebookLogin from './FacebookLogin';
-import GoogleLogin from './GmailLogin';
+// import GoogleLogin from './GmailLogin';
 import ReCAPTCHA from 'react-google-recaptcha';
 import PropTypes from 'prop-types';
+import GmailLogin from './GmailLogin';
 
 const Register = ({
   setAlert,
@@ -89,9 +91,19 @@ const Register = ({
       fields="name,email,id"
       callback={facebookResponse}
       icon="fa-facebook"
+      textButton="Register with Facebook"
       // onClick={facebookClicked}
     />
   );
+
+  const loginGoogle = (response) => {
+    console.log(response);
+  };
+
+  // const GoogleLoginButton = () => (
+  //   // <p>Hi</p>
+
+  // );
 
   const facebookResponse = async (response) => {
     await attemptFacebook();
@@ -102,16 +114,26 @@ const Register = ({
     });
   };
 
+  const responseGoogle = async (response) => {
+    console.log(response);
+  };
+
   return (
     <Fragment>
       {!facebookAttempted ? (
         <Fragment>
-          <h1 className="large text-primary">Sign Up</h1>
+          <h1 className="large text-primary">Register</h1>
           <p className="lead">
             <i className="fas fa-user"></i> Create Your Account
           </p>
+          {/* <GoogleLogin
+            clientId="753445575160-cajf8p3ntsdrkhj6s744a7gflmdscd0j.apps.googleusercontent.com"
+            buttonText="Log in with Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+          /> */}
           <FacebookLoginButton onChange={facebookChosen} />
-          <GoogleLogin />
           <form className="form" onSubmit={(e) => onSubmit(e)}>
             <div className="form-group">
               <input
