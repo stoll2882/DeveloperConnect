@@ -5,7 +5,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const normalize = require('normalize-url');
 const accountSid = 'ACb8a54de76e88ea636ad7a6b40405f05b';
-const authToken = 'f348fb2b6e0f8f464c1d0c24b294c425';
+const authToken = '2c14ee37e0ff7ff92100732efb2e7af1';
 const client = require('twilio')(accountSid, authToken);
 
 // @route   POST api/textmessage
@@ -30,3 +30,7 @@ router.post('/', async (req, res) => {
 });
 
 module.exports = router;
+
+// info for api key usage
+// sid: SKffc116162ea0bcac6e39ad7c2994b5ab
+// secret: eczDTq0jMD71QXzaYuwL2YPtXOCUdXjT
