@@ -1,12 +1,18 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link, Redirect } from 'react-router-dom';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { sendTextMessage } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
 
-const Contact = ({ setAlert, sendTextMessage, auth: { user } }) => {
+const Contact = ({
+  setAlert,
+  sendTextMessage,
+  auth: { user },
+  isAuthenticated,
+}) => {
   const [formData, setFormData] = useState({
     phoneNumber: '',
     message: '',
@@ -17,15 +23,25 @@ const Contact = ({ setAlert, sendTextMessage, auth: { user } }) => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  if (!isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const name = user.name;
-    sendTextMessage(name, phoneNumber, message);
-    setFormData({
-      phoneNumber: '',
-      message: '',
-    });
-    setAlert('Your message has been sent');
+    if (!phoneNumber) {
+      setAlert('Phone number is required', 'danger');
+    } else if (!message) {
+      setAlert('Message is required');
+    } else {
+      sendTextMessage(name, phoneNumber, message);
+      setFormData({
+        phoneNumber: '',
+        message: '',
+      });
+      setAlert('Your message has been sent');
+    }
   };
 
   const onPhoneChange = (e) => {
@@ -48,6 +64,7 @@ const Contact = ({ setAlert, sendTextMessage, auth: { user } }) => {
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <PhoneInput
           maxLength="15"
+          minLength="4"
           id="phoneNumber"
           //   style={{ height: '30px', maxWidth: '270px' }}
           defaultCountry="US"
@@ -55,7 +72,6 @@ const Contact = ({ setAlert, sendTextMessage, auth: { user } }) => {
           value={phoneNumber}
           onChange={(e) => onPhoneChange(e)}
         />
-
         <div className="form-group">
           <input
             type="text"
@@ -69,11 +85,6 @@ const Contact = ({ setAlert, sendTextMessage, auth: { user } }) => {
             required
           />
         </div>
-        {/* <style type="text/css">
-            #twilio-connect-button { background: url(https://www.twilio.com/bundles/connect-apps/img/connect-button.png); width: 130px; height: 34px; display: block; margin: 0 auto 
-            #twilio-connect-button:hover { background-position: 0 34px; }
-</style>
-<a href="https://www.twilio.com/authorize/CN91c60e1e53b800a4520341ba9cbfbbcc" id="twilio-connect-button"></a>  */}
         <input type="submit" className="btn btn-primary" value="Submit" />
       </form>
     </Fragment>
@@ -87,6 +98,7 @@ Contact.propTypes = {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { sendTextMessage, setAlert })(Contact);
