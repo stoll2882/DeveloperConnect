@@ -51,6 +51,19 @@ const EditProfile = ({
     });
   }, [loading, getCurrentProfile]); // prop it depends on
 
+  const youTubeRegExp = new RegExp(
+    `/((http|https):\/\/|)(www.|)youtube\.com\/(channel\/|user\/|)[a-zA-Z0-9]{1,}/`,
+    `ig`
+  );
+  const facebookRegExp = new RegExp(
+    `(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?`,
+    `ig`
+  );
+  const twitterRegExp = new RegExp(
+    `(https:\/\/twitter.com\/(?![a-zA-Z0-9_]+\/)([a-zA-Z0-9_]+))`,
+    `ig`
+  );
+
   const {
     company,
     website,
@@ -72,7 +85,7 @@ const EditProfile = ({
   const [validSocialLinks, setValidSocialLinks] = useState({
     youtubeValid: false,
     // twitterValid: false,
-    // facebookValid: false,
+    facebookValid: false,
     // linkedinValid: false,
     // instagramValid: false
   });
@@ -87,7 +100,15 @@ const EditProfile = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    createProfile(formData, history, true);
+    if (facebook && facebookRegExp.test(facebook) == false) {
+      setAlert('facebook link invalid', 'danger');
+    } else if (youtube && youTubeRegExp.test(youtube) == false) {
+      setAlert('youtube link invalid', 'danger');
+    } else if (twitter && twitterRegExp.test(twitter) == false) {
+      setAlert('twitter link invalid', 'danger');
+    } else {
+      createProfile(formData, history, true);
+    }
   };
 
   return (

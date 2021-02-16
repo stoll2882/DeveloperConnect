@@ -16,6 +16,7 @@ app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/posts'));
 app.use('/api/recaptcha', require('./routes/api/recaptcha'));
+app.use('/api/textmessage', require('./routes/api/textmessage'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

@@ -488,6 +488,32 @@ button {
   margin-bottom: 0.5rem;
 }
 
+input.PhoneInputInput {
+  font-size: 1.2rem;
+  height: 30px;
+  /* outline-style: none; */
+  border-width: 0.5px;
+  border-color: rgb(203, 203, 203);
+  border-top-style: none;
+  border-right-style: none;
+  border-left-style: none;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  padding-left: 7px;
+  max-width: 210px;
+}
+
+div.PhoneInput {
+  height: 30px;
+  outline-style: none;
+  border-style: none;
+}
+
+select.PhoneInputCountrySelect {
+  height: 30px;
+  font-size: 1.4rem;
+}
+
 /* Mobile Styles */
 @media (max-width: 700px) {
   .container {

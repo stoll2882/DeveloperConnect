@@ -147,6 +147,26 @@ export const login = (email, password, id) => async (dispatch) => {
   }
 };
 
+export const sendTextMessage = (name, phoneNumber, message) => async (
+  dispatch
+) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  var body;
+  body = JSON.stringify({ name, phoneNumber, message });
+
+  try {
+    await axios.post('/api/textmessage', body, config);
+
+    dispatch(setAlert('Text message sent'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+  }
+};
+
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
