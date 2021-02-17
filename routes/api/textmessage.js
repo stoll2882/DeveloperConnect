@@ -4,8 +4,8 @@ const config = require('config');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const normalize = require('normalize-url');
-const accountSid = 'ACb8a54de76e88ea636ad7a6b40405f05b';
-const authToken = '2c14ee37e0ff7ff92100732efb2e7af1';
+const accountSid = 'XXX';
+const authToken = 'XXX';
 const client = require('twilio')(accountSid, authToken);
 
 // @route   POST api/textmessage
@@ -24,13 +24,25 @@ router.post('/', async (req, res) => {
     .create({
       body: `From: ${phoneNumber} - ${message}`,
       from: '+14694053235',
-      to: `+14259854543`,
+      to: `+XXX`,
     })
     .then((message) => console.log(message.sid));
 });
 
 module.exports = router;
 
-// info for api key usage
-// sid: SKffc116162ea0bcac6e39ad7c2994b5ab
-// secret: eczDTq0jMD71QXzaYuwL2YPtXOCUdXjT
+// @route   POST api/textmessage/twofactorauth
+// @desc    Get current users profile
+// @access  Private
+router.post('/twofactorauth', async (req, res) => {
+  // const { code } = req.body;
+  // client.messages
+  //   .create({
+  //     body: `Your DevConnect verification code is ${code}`,
+  //     from: '+14694053235',
+  //     to: `+${phoneNumber}`,
+  //   })
+  //   .then((message) => console.log(message.sid));
+});
+
+module.exports = router;

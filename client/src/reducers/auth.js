@@ -11,6 +11,9 @@ import {
   RECAPTCHA_EXPIRED,
   RECAPTCHA_DENIED,
   FACEBOOK_REGISTER_ATTEMPTED,
+  TWO_FACTOR_ATTEMPTED,
+  TWO_FACTOR_SUCCESS,
+  TWO_FACTOR_FAILED,
 } from '../actions/types';
 
 const initialState = {
@@ -18,6 +21,7 @@ const initialState = {
   isAuthenticated: null,
   recaptchaApproved: false,
   facebookAttempted: false,
+  twoFactorAttempted: false,
   loading: true,
   user: null,
 };
@@ -32,6 +36,7 @@ export default function (state = initialState, action) {
         loading: false,
         user: payload,
         facebookAttempted: false,
+        // twoFactorAttempted: false,
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
@@ -42,7 +47,9 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         facebookAttempted: false,
+        // twoFactorAttempted: false,
       };
+    case TWO_FACTOR_FAILED:
     case REGISTER_FAIL:
     case LOGIN_FAIL:
     case AUTH_ERROR:
@@ -55,6 +62,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         loading: false,
         facebookAttempted: false,
+        // twoFactorAttempted: false,
       };
     case RECAPTCHA_EXPIRED:
     case RECAPTCHA_DENIED:
@@ -66,6 +74,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         recaptchaApproved: true,
+      };
+    case TWO_FACTOR_ATTEMPTED:
+      return {
+        ...state,
+        twoFactorAttempted: true,
       };
     case FACEBOOK_REGISTER_ATTEMPTED:
       return {

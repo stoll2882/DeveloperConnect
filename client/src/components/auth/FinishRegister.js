@@ -30,8 +30,9 @@ const FinishRegister = ({
   });
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
 
-  const { alias, phoneNumber } = formData;
+  // const { alias, phoneNumber } = formData;
 
   var human = recaptchaApproved;
 
@@ -49,13 +50,15 @@ const FinishRegister = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!privacyPolicyAccepted) {
+    if (!phoneNumber) {
+      setAlert('Phone number is required', 'danger');
+    } else if (!privacyPolicyAccepted) {
       setAlert('Please accept the terms and conditions', 'danger');
     } else if (human == false) {
       setAlert('Please verify you are human', 'danger');
     } else {
       const type = 'facebook';
-      register(facebookName, email, null, type, id);
+      register(facebookName, email, null, phoneNumber, type, id);
     }
   };
 
@@ -71,6 +74,10 @@ const FinishRegister = ({
     setShowPrivacyPolicy(!showPrivacyPolicy);
   };
 
+  const onPhoneChange = (e) => {
+    setPhoneNumber(e);
+  };
+
   return (
     <Fragment>
       <button className="btn" onClick={backClicked}>
@@ -83,6 +90,17 @@ const FinishRegister = ({
       <h2>Email: {email}</h2>
       {/* <h2>{id}</h2> */}
       <form className="form" onSubmit={(e) => onSubmit(e)}>
+        <br></br>
+        <PhoneInput
+          maxLength="15"
+          minLength="4"
+          id="phoneNumber"
+          //   style={{ height: '30px', maxWidth: '270px' }}
+          defaultCountry="US"
+          placeholder="Enter phone number"
+          value={phoneNumber}
+          onChange={(e) => onPhoneChange(e)}
+        />
         <br></br>
         <input
           type="checkbox"

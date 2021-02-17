@@ -13,6 +13,10 @@ import {
   RECAPTCHA_DENIED,
   FACEBOOK_REGISTER_ATTEMPTED,
   RECAPTCHA_EXPIRED,
+  CONTACT_MESSAGE_SENT,
+  TWO_FACTOR_ATTEMPTED,
+  TWO_FACTOR_SUCCESS,
+  TWO_FACTOR_FAILED,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { Fragment } from 'react';
@@ -44,9 +48,14 @@ export const attemptFacebook = () => (dispatch) => {
 };
 
 // Register User
-export const register = (name, email, password, type, id) => async (
-  dispatch
-) => {
+export const register = (
+  name,
+  email,
+  password,
+  phoneNumber,
+  type,
+  id
+) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -60,9 +69,9 @@ export const register = (name, email, password, type, id) => async (
   var body;
   if (!password) {
     password = id;
-    body = JSON.stringify({ name, email, password, type, id });
+    body = JSON.stringify({ name, email, password, phoneNumber, type, id });
   } else {
-    body = JSON.stringify({ name, email, password, type });
+    body = JSON.stringify({ name, email, password, phoneNumber, type });
   }
 
   try {
@@ -160,11 +169,38 @@ export const sendTextMessage = (name, phoneNumber, message) => async (
 
   try {
     await axios.post('/api/textmessage', body, config);
+    dispatch({
+      type: CONTACT_MESSAGE_SENT,
+    });
 
-    dispatch(setAlert('Text message sent'));
+    // dispatch(setAlert('Text message sent'));
   } catch (err) {
     const errors = err.response.data.errors;
   }
+};
+
+export const twoFactorAuth = (code) => async (dispatch) => {
+  const body = { code: code };
+  dispatch({
+    type: TWO_FACTOR_ATTEMPTED,
+  });
+  try {
+    await axios.post('/api/textmessage/twofactorauth', body);
+    dispatch({
+      type: CONTACT_MESSAGE_SENT,
+    });
+
+    // dispatch(setAlert('Text message sent'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+  }
+};
+
+export const dispatchTwoFactorAuth = (code) => async (dispatch) => {
+  // const body = { code: code };
+  dispatch({
+    type: TWO_FACTOR_ATTEMPTED,
+  });
 };
 
 // Logout / Clear Profile

@@ -6,6 +6,8 @@ import {
   register,
   attemptFacebook,
   dispatchExpireCaptcha,
+  twoFactorAuth,
+  dispatchTwoFactorAuth,
 } from '../../actions/auth';
 import FacebookLoginWithButton from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
@@ -16,6 +18,8 @@ import FacebookLogin from './FacebookLogin';
 import ReCAPTCHA from 'react-google-recaptcha';
 import PropTypes from 'prop-types';
 import GmailLogin from './GmailLogin';
+import PhoneInput from 'react-phone-number-input';
+import TwoFactorConfirmation from './TwoFactorConfirmation';
 
 const Register = ({
   setAlert,
@@ -26,6 +30,9 @@ const Register = ({
   isAuthenticated,
   recaptchaApproved,
   facebookAttempted,
+  twoFactorAttempted,
+  twoFactorAuth,
+  dispatchTwoFactorAuth,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -34,6 +41,7 @@ const Register = ({
     password2: '',
     id: '',
     facebookOption: false,
+    phoneNumber: '',
   });
 
   const [userData, setUserData] = useState({
@@ -44,7 +52,17 @@ const Register = ({
 
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
-  const { name, email, password, password2, id, facebookOption } = formData;
+  const [twoFactorAuthCode, setTwoFactorAuthCode] = useState('');
+
+  const {
+    name,
+    email,
+    password,
+    password2,
+    id,
+    facebookOption,
+    phoneNumber,
+  } = formData;
 
   var human = recaptchaApproved;
 
@@ -62,7 +80,9 @@ const Register = ({
     } else if (human == false) {
       setAlert('Please verify you are human', 'danger');
     } else {
-      await register(name, email, password, type, null);
+      generateCode();
+      dispatchTwoFactorAuth();
+      // await register(name, email, password, phoneNumber, type, null);
     }
   };
 
@@ -77,9 +97,13 @@ const Register = ({
     setFormData({ ...formData, human: false });
   };
 
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
+  // if (isAuthenticated) {
+  //   return <Redirect to="/dashboard" />;
+  // }
+
+  // if (twoFactorAttempted) {
+  //   return <Redirect to="/twofactorconfirmation" />;
+  // }
 
   const facebookChosen = () => {
     setFormData({ facebookOption: true });
@@ -118,102 +142,147 @@ const Register = ({
     console.log(response);
   };
 
+  const generateCode = () => {
+    const randomCode = Math.floor(100000 + Math.random() * 900000);
+    setTwoFactorAuthCode(`${randomCode}`);
+  };
+
+  const onPhoneChange = (e) => {
+    setFormData({ ...formData, phoneNumber: e });
+  };
+
   return (
     <Fragment>
       {!facebookAttempted ? (
-        <Fragment>
-          <h1 className="large text-primary">Register</h1>
-          <p className="lead">
-            <i className="fas fa-user"></i> Create Your Account
-          </p>
-          {/* <GoogleLogin
+        !twoFactorAttempted ? (
+          <Fragment>
+            <h1 className="large text-primary">Register</h1>
+            <p className="lead">
+              <i className="fas fa-user"></i> Create Your Account
+            </p>
+            {/* <GoogleLogin
             clientId="753445575160-cajf8p3ntsdrkhj6s744a7gflmdscd0j.apps.googleusercontent.com"
             buttonText="Log in with Google"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             cookiePolicy={'single_host_origin'}
           /> */}
-          <FacebookLoginButton onChange={facebookChosen} />
-          <form className="form" onSubmit={(e) => onSubmit(e)}>
-            <div className="form-group">
-              <input
-                type="text"
-                placeholder="Name"
-                name="name"
-                id="namefield"
-                value={name}
-                onChange={(e) => onChange(e)}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="email"
-                placeholder="Email Address"
-                name="email"
-                id="emailfield"
-                value={email}
-                onChange={(e) => onChange(e)}
-                required
-              />
+            <FacebookLoginButton onChange={facebookChosen} />
+            <br></br>
+            <form className="form" onSubmit={(e) => onSubmit(e)}>
               <small className="form-text">
-                This site uses Gravatar so if you want a profile image, use a
-                Gravatar email
+                If you do not register with facebook, you will be prompted for
+                two-factor-authentication
               </small>
-            </div>
-            <div className="form-group">
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                minLength="6"
-                value={password}
-                onChange={(e) => onChange(e)}
-                required
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  id="namefield"
+                  value={name}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="email"
+                  id="emailfield"
+                  value={email}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+                <small className="form-text">
+                  This site uses Gravatar so if you want a profile image, use a
+                  Gravatar email
+                </small>
+              </div>
+              <PhoneInput
+                maxLength="15"
+                minLength="4"
+                id="phoneNumber"
+                //   style={{ height: '30px', maxWidth: '270px' }}
+                defaultCountry="US"
+                placeholder="Phone number"
+                value={phoneNumber}
+                onChange={(e) => onPhoneChange(e)}
               />
-            </div>
-            <div className="form-group">
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                name="password2"
-                minLength="6"
-                value={password2}
-                onChange={(e) => onChange(e)}
-                required
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  minLength="6"
+                  value={password}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  name="password2"
+                  minLength="6"
+                  value={password2}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+              </div>
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+                render="explicit"
+                onChange={verifyCaptcha}
+                onExpired={expireCaptcha}
               />
-            </div>
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
-              render="explicit"
-              onChange={verifyCaptcha}
-              onExpired={expireCaptcha}
-            />
-            <br></br>
-            <input
-              type="checkbox"
-              id="privacypolicy"
-              name="privacypolicy"
-              value="privacypolicy"
-              onChange={(e) => setPrivacyPolicyAccepted(!privacyPolicyAccepted)}
-            />{' '}
-            <label htmlFor="privacypolicy">
-              I agree to the{' '}
-              <Link to="/privacypolicy">
-                privacy policy and terms of service
-              </Link>
-            </label>
-            <br></br>
-            <br></br>
-            <input type="submit" className="btn btn-primary" value="Register" />
-          </form>
-          <p className="my-1">
-            Already have an account? <Link to="/login">Sign In</Link>
-          </p>
-        </Fragment>
+              <br></br>
+              <input
+                type="checkbox"
+                id="privacypolicy"
+                name="privacypolicy"
+                value="privacypolicy"
+                onChange={(e) =>
+                  setPrivacyPolicyAccepted(!privacyPolicyAccepted)
+                }
+              />{' '}
+              <label htmlFor="privacypolicy">
+                I agree to the{' '}
+                <Link to="/privacypolicy">
+                  privacy policy and terms of service
+                </Link>
+              </label>
+              <br></br>
+              <br></br>
+              {twoFactorAuthCode && <h1>{twoFactorAuthCode}</h1>}
+              <input
+                type="submit"
+                className="btn btn-primary"
+                value="Register"
+              />
+            </form>
+            <p className="my-1">
+              Already have an account? <Link to="/login">Sign In</Link>
+            </p>
+          </Fragment>
+        ) : (
+          <TwoFactorConfirmation
+            name={name}
+            email={email}
+            password={password}
+            phoneNumber={phoneNumber}
+          />
+        )
       ) : (
-        <FinishRegister facebookName={name} email={email} id={id} />
+        <FinishRegister
+          facebookName={name}
+          email={email}
+          id={id}
+          twoFactorAuthCode={twoFactorAuthCode}
+        />
       )}
     </Fragment>
   );
@@ -224,16 +293,20 @@ Register.propTypes = {
   register: PropTypes.func.isRequired,
   attemptFacebook: PropTypes.func.isRequired,
   reCaptchaCheck: PropTypes.func.isRequired,
+  twoFactorAuth: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   dispatchExpireCaptcha: PropTypes.func.isRequired,
   recaptchaApproved: PropTypes.bool,
   facebookAttempted: PropTypes.bool,
+  twoFactorAttempted: PropTypes.bool,
+  dispatchTwoFactorAuth: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   recaptchaApproved: state.auth.recaptchaApproved,
   facebookAttempted: state.auth.facebookAttempted,
+  twoFactorAttempted: state.auth.twoFactorAttempted,
 });
 
 export default connect(mapStateToProps, {
@@ -242,4 +315,6 @@ export default connect(mapStateToProps, {
   reCaptchaCheck,
   attemptFacebook,
   dispatchExpireCaptcha,
+  twoFactorAuth,
+  dispatchTwoFactorAuth,
 })(Register);

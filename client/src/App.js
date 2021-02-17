@@ -5,6 +5,7 @@ import Landing from './components/layout/Landing';
 import Register from './components/auth/Register';
 import PrivacyPolicy from './components/auth/PrivacyNotice';
 import FinishRegister from './components/auth/FinishRegister';
+import TwoFactorConfirmation from './components/auth/TwoFactorConfirmation';
 import Login from './components/auth/Login';
 import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
@@ -47,6 +48,11 @@ const App = () => {
             <Switch>
               <Route exact path="/register" component={Register} />
               <Route exact path="/finishregister" component={FinishRegister} />
+              <Route
+                exact
+                path="/twofactorconfirmation"
+                component={TwoFactorConfirmation}
+              />
               <Route exact path="/privacypolicy" component={PrivacyPolicy} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/profiles" component={Profiles} />

@@ -21,16 +21,6 @@ router.get('/', auth, async (req, res) => {
     console.error(err.message);
     // res.status(500).send('Server Error');
   }
-  // if (!gotUser) {
-  //   try {
-  //     const user = await FacebookUser.findById(req.facebookuser.fbid);
-  //     gotUser = true;
-  //     res.json(user);
-  //   } catch (err) {
-  //     console.error(err.message);
-  //     res.status(500).send('Server Error');
-  //   }
-  // }
 });
 
 // @route    POST api/auth
@@ -86,46 +76,6 @@ router.post(
       console.error(err.message);
       res.status(500).send('Server error');
     }
-
-    // if (!gotUser) {
-    //   try {
-    //     let user = await FacebookUser.findOne({ email });
-
-    //     if (!user) {
-    //       return res
-    //         .status(400)
-    //         .json({ errors: [{ msg: 'Invalid Credentials' }] });
-    //     }
-
-    //     const isMatch = await bcrypt.compare(fbid, user.fbid);
-
-    //     if (!isMatch) {
-    //       gotUser = true;
-    //       return res
-    //         .status(400)
-    //         .json({ errors: [{ msg: 'Invalid Credentials' }] });
-    //     }
-
-    //     const payload = {
-    //       user: {
-    //         id: user.fbid,
-    //       },
-    //     };
-
-    //     jwt.sign(
-    //       payload,
-    //       config.get('jwtSecret'),
-    //       { expiresIn: '5 days' },
-    //       (err, token) => {
-    //         if (err) throw err;
-    //         res.json({ token });
-    //       }
-    //     );
-    //   } catch (err) {
-    //     console.error(err.message);
-    //     res.status(500).send('Server error');
-    //   }
-    // }
   }
 );
 
