@@ -4,8 +4,9 @@ const config = require('config');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const normalize = require('normalize-url');
-const accountSid = 'XXX';
-const authToken = 'XXX';
+const process = require('process');
+const accountSid = process.env.TWILIO_SID || 'ACageakubguakebgkuabekugb';
+const authToken = process.env.TWILIO_TOKEN || 'akgubak7h3tak37htkabg';
 const client = require('twilio')(accountSid, authToken);
 
 // @route   POST api/textmessage
