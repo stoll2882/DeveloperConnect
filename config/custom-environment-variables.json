@@ -20,7 +20,7 @@
         "serverKey": "RECAPTCHA_SERVERKEY"
     },
     "server": {
-        "port": "SERVER_PORT"
+        "port": "PORT"
     }
 
 }
