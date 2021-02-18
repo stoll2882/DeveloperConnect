@@ -1,0 +1,26 @@
+{
+    "facebookLogin": {
+        "appId": "FACEBOOK_LOGIN_APPID"
+    },
+    "database": {
+        "mongoURI": "DB_MONGOURI"
+    },
+    "jwt": {
+        "secret": "JWT_SECRET"
+    },
+    "twilio": {
+        "sid": "TWILIO_SID",
+        "token": "TWILIO_TOKEN",
+        "from": "TWILION_FROM"
+    },
+    "contactMe": {
+        "sms": "CONTACTME_SMS"
+    },
+    "reCaptcha": {
+        "serverKey": "RECAPTCHA_SERVERKEY"
+    },
+    "server": {
+        "port": "SERVER_PORT"
+    }
+
+}

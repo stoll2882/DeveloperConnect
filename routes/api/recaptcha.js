@@ -8,7 +8,7 @@ require('isomorphic-fetch');
 
 const { check, validationResult } = require('express-validator');
 
-const RECAPTCHA_SERVER_KEY = '6Le2z0oaAAAAAB1WymVKZLa6WU34rzXNYpUZ5iJx';
+const RECAPTCHA_SERVER_KEY = config.get('reCaptcha.serverKey');
 
 // @route   POST api/recaptcha
 // @desc    Check if user is human

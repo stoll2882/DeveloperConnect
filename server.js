@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
+const config = require('config');
 
 const app = express();
 
@@ -29,6 +30,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // will run on 5000 if no environment variable set
-const PORT = process.env.PORT || 5000;
+const PORT = config.get("server.port") || 5000;
 
 app.listen(PORT, () => console.log('Server started on port ' + PORT));

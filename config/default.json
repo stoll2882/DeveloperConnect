@@ -1,6 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://samtoll:Socerisfun2882!@developerconnect.hfvpa.mongodb.net/DeveloperConnect?retryWrites=true&w=majority",
-  "githubClientId": "73e19aaca94184bcdfb9",
-  "githubSecret": "a7411072670c96380f3573eb2ff2e8d8c9cb142a",
-  "jwtSecret": "noSecretToken"
-}
