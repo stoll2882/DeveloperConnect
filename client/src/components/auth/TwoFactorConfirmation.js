@@ -1,8 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { register, dispatchExpireCaptcha } from '../../actions/auth';
+import {
+  register,
+  dispatchExpireCaptcha,
+  twoFactorAuth,
+  twoFactorAuthCheck,
+} from '../../actions/auth';
 import PhoneInput from 'react-phone-number-input';
 import PropTypes from 'prop-types';
 
@@ -13,15 +18,27 @@ const TwoFactorConfirmation = ({
   password,
   setAlert,
   isAuthenticated,
+  twoFactorAuth,
+  twoFactorApproved,
+  twoFactorAuthCheck,
 }) => {
+  useEffect(() => {
+    twoFactorAuth(email, phoneNumber);
+  }, [twoFactorAuth]);
   const [confirmationCode, setConfirmationCode] = useState('');
 
   const [twoFactorAuthCode, setTwoFactorAuthCode] = useState('');
 
+  const checkConfirmationCode = (value) => {
+    setConfirmationCode(value);
+    twoFactorAuthCheck(email, confirmationCode);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!phoneNumber) {
-      setAlert('Phone number is required', 'danger');
+    await twoFactorAuthCheck(email, confirmationCode);
+    if (!twoFactorApproved) {
+      setAlert('Security Code Incorrect', 'danger');
     } else {
       const type = 'self';
       register(name, email, password, phoneNumber, type, null);
@@ -36,9 +53,14 @@ const TwoFactorConfirmation = ({
     window.location.reload();
   };
 
-  const generateCode = () => {
-    const randomCode = Math.floor(100000 + Math.random() * 900000);
-    setTwoFactorAuthCode(`${randomCode}`);
+  // const generateCode = () => {
+  //   const randomCode = Math.floor(100000 + Math.random() * 900000);
+  //   setTwoFactorAuthCode(`${randomCode}`);
+  // };
+
+  const handleCodeChange = (event) => {
+    setConfirmationCode(event.target.value);
+    // twoFactorAuthCheck(email, confirmationCode);
   };
 
   return (
@@ -48,24 +70,31 @@ const TwoFactorConfirmation = ({
       </button>
       <br></br>
       <br></br>
-      <h1 className="large text-primary">You're almost there {name}</h1>
-      <h2>Name: {name}</h2>
+      <h1 className="large text-primary">Please verify it is you, {name}</h1>
+      {/* <h2>Name: {name}</h2>
       <h2>Email: {email}</h2>
       <h2>Password: {password}</h2>
-      <h2>Code: {twoFactorAuthCode}</h2>
-      <h2>Confirmation code sent to: {phoneNumber}</h2>
+      <h2>Code: {twoFactorAuthCode}</h2> */}
+      <h2>
+        Security code sent to: ******
+        {phoneNumber.substr(phoneNumber.length - 4)}
+      </h2>
       {/* <h2>{id}</h2> */}
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <br></br>
         <input
           type="text"
           id="confirmationCode"
+          maxLength="6"
           name="confirmationCode"
           value={confirmationCode}
-          onChange={(e) => setConfirmationCode(e.value)}
+          onChange={handleCodeChange}
         />{' '}
         <br></br>
-        <input type="submit" className="btn btn-primary" value="Register" />
+        <button className="btn">Resend Code</button>
+        <br></br>
+        <br></br>
+        <input type="submit" className="btn btn-primary" value="Continue" />
       </form>
       <p className="my-1">
         {/* Already have an account? <Link to="/login">Sign In</Link> */}
@@ -77,12 +106,18 @@ const TwoFactorConfirmation = ({
 TwoFactorConfirmation.propTypes = {
   setAlert: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  twoFactorAuth: PropTypes.func.isRequired,
+  twoFactorAuthCheck: PropTypes.func.isRequired,
+  twoFactorApproved: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  twoFactorApproved: state.auth.twoFactorApproved,
 });
 
 export default connect(mapStateToProps, {
   setAlert,
+  twoFactorAuth,
+  twoFactorAuthCheck,
 })(TwoFactorConfirmation);

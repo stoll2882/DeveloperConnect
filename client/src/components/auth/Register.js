@@ -80,7 +80,7 @@ const Register = ({
     } else if (human == false) {
       setAlert('Please verify you are human', 'danger');
     } else {
-      generateCode();
+      // generateCode();
       dispatchTwoFactorAuth();
       // await register(name, email, password, phoneNumber, type, null);
     }
@@ -142,10 +142,10 @@ const Register = ({
     console.log(response);
   };
 
-  const generateCode = () => {
-    const randomCode = Math.floor(100000 + Math.random() * 900000);
-    setTwoFactorAuthCode(`${randomCode}`);
-  };
+  // const generateCode = () => {
+  //   const randomCode = Math.floor(100000 + Math.random() * 900000);
+  //   setTwoFactorAuthCode(`${randomCode}`);
+  // };
 
   const onPhoneChange = (e) => {
     setFormData({ ...formData, phoneNumber: e });
@@ -257,7 +257,6 @@ const Register = ({
               </label>
               <br></br>
               <br></br>
-              {twoFactorAuthCode && <h1>{twoFactorAuthCode}</h1>}
               <input
                 type="submit"
                 className="btn btn-primary"

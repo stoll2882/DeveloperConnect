@@ -179,13 +179,14 @@ export const sendTextMessage = (name, phoneNumber, message) => async (
   }
 };
 
-export const twoFactorAuth = (code) => async (dispatch) => {
-  const body = { code: code };
+export const twoFactorAuth = (email, phoneNumber) => async (dispatch) => {
+  const body = { email: email, phoneNumber: phoneNumber };
+
   dispatch({
     type: TWO_FACTOR_ATTEMPTED,
   });
   try {
-    await axios.post('/api/textmessage/twofactorauth', body);
+    await axios.post('/api/twofa', body);
     dispatch({
       type: CONTACT_MESSAGE_SENT,
     });
@@ -193,6 +194,24 @@ export const twoFactorAuth = (code) => async (dispatch) => {
     // dispatch(setAlert('Text message sent'));
   } catch (err) {
     const errors = err.response.data.errors;
+  }
+};
+
+export const twoFactorAuthCheck = (email, code) => async (dispatch) => {
+  const body = JSON.stringify({ email, code });
+
+  try {
+    await axios.get('/api/twofa', body);
+    dispatch({
+      type: TWO_FACTOR_SUCCESS,
+    });
+
+    // dispatch(setAlert('Text message sent'));
+  } catch (err) {
+    dispatch({
+      type: TWO_FACTOR_FAILED,
+    });
+    // const errors = err.response.data.errors;
   }
 };
 

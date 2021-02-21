@@ -22,6 +22,7 @@ const initialState = {
   recaptchaApproved: false,
   facebookAttempted: false,
   twoFactorAttempted: false,
+  twoFactorApproved: false,
   loading: true,
   user: null,
 };
@@ -62,6 +63,8 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         loading: false,
         facebookAttempted: false,
+        twoFactorApproved: false,
+        // twoFactorAttempted: false,
         // twoFactorAttempted: false,
       };
     case RECAPTCHA_EXPIRED:
@@ -84,6 +87,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         facebookAttempted: true,
+      };
+    case TWO_FACTOR_SUCCESS:
+      return {
+        ...state,
+        twoFactorApproved: true,
+      };
+    case TWO_FACTOR_FAILED:
+      return {
+        ...state,
+        twoFactorApproved: false,
       };
     default:
       return state;
