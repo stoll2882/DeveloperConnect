@@ -41,6 +41,8 @@ const TwoFactorLoginConfirmation = ({
     const result = await twoFactorAuthCheck(email, confirmationCode);
     if (!result) {
       setAlert('Security Code Incorrect', 'danger');
+    } else {
+      <Redirect to="/dashboard" />;
     }
   };
 

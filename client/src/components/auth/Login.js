@@ -20,6 +20,7 @@ export const Login = ({
   isAuthenticated,
   facebookAttempted,
   twoFactorAttempted,
+  googleAttempted,
   recaptchaApproved,
   dispatchExpireCaptcha,
   dispatchTwoFactorAuth,
@@ -47,7 +48,7 @@ export const Login = ({
     // if (human == true) {
     //   setAlert('Please verify you are human', 'danger');
     // } else {
-    // login(email, password, null);
+    login(email, password, null);
     dispatchTwoFactorAuth();
     // }
   };
@@ -68,7 +69,7 @@ export const Login = ({
 
   return (
     <Fragment>
-      {!twoFactorAttempted ? (
+      {!isAuthenticated ? (
         <Fragment>
           <h1 className="large text-primary">Login</h1>
           <p className="lead">
@@ -131,6 +132,7 @@ Login.propTypes = {
   recaptchaApproved: PropTypes.bool,
   setAlert: PropTypes.func.isRequired,
   twoFactorAttempted: PropTypes.bool,
+  googleAttemped: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
@@ -138,6 +140,7 @@ const mapStateToProps = (state) => ({
   facebookAttempted: state.auth.facebookAttempted,
   recaptchaApproved: state.auth.recaptchaApproved,
   twoFactorAttempted: state.auth.twoFactorAttempted,
+  googleAttempted: state.auth.googleAttempted,
   auth: state.auth,
 });
 
