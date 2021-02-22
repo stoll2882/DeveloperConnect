@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
 // @route   GET api/twofa
 // @desc    Get current users code and check if correct
 // @access  Private
-router.get('/', async (req, res) => {
+router.post('/verify', async (req, res) => {
   const { email, code } = req.body;
 
   try {

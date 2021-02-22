@@ -97,9 +97,9 @@ const Register = ({
     setFormData({ ...formData, human: false });
   };
 
-  // if (isAuthenticated) {
-  //   return <Redirect to="/dashboard" />;
-  // }
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   // if (twoFactorAttempted) {
   //   return <Redirect to="/twofactorconfirmation" />;

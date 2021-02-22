@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,6 +6,7 @@ import { createProfile, getCurrentProfile } from '../../actions/profile';
 import { setAlert } from '../../actions/alert';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
+// import { options } from '../../../../routes/api/auth';
 
 const EditProfile = ({
   profile: { profile, loading },
@@ -30,6 +31,12 @@ const EditProfile = ({
   });
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+  const countryOptions = useMemo(() => countryList().getData(), []);
+
+  const CountrySelector = () => {
+    const countryOptions = useMemo(() => countryList().getData(), []);
+    return <Select options={countryOptions} />;
+  };
 
   useEffect(() => {
     getCurrentProfile();
@@ -168,9 +175,103 @@ const EditProfile = ({
             value={location}
             onChange={(e) => onChange(e)}
           />
-          <small className="form-text">
-            City & state suggested (eg. Boston, MA)
-          </small>
+          <small className="form-text">Street Address</small>
+        </div>
+        <div style={{ display: 'inline-block', width: '100%' }}>
+          <input
+            type="text"
+            placeholder="City"
+            name="city"
+            style={{ maxWidth: '49%', float: 'left' }}
+            // value={street}
+            // onChange={(e) => onChange(e)}
+          />
+          <select
+            type="text"
+            placeholder="State"
+            name="state"
+            style={{ maxWidth: '49%', float: 'right' }}
+            // value={street}
+            // onChange={(e) => onChange(e)}
+          >
+            <option value="0">Select State</option>
+            <option value="Alabama">Alabama</option>
+            <option value="Alaska">Alaska</option>
+            <option value="Arizona">Arizona</option>
+            <option value="Arkansas">Arkansas</option>
+            <option value="California">California</option>
+            <option value="Colorado">Colorado</option>
+            <option value="Connecticut">Connecticut</option>
+            <option value="Delaware">Delaware</option>
+            <option value="Flordia">Flordia</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Hawaii">Hawaii</option>
+            <option value="Idaho">Idaho</option>
+            <option value="Illinois">Illinois</option>
+            <option value="Indiana">Indiana</option>
+            <option value="Iowa">Iowa</option>
+            <option value="Kansas">Kansas</option>
+            <option value="Kentucky">Kentucky</option>
+            <option value="Louisiana">Louisiana</option>
+            <option value="Maine">Maine</option>
+            <option value="Maryland">Maryland</option>
+            <option value="Massachusetts">Massachusetts</option>
+            <option value="Minnesota">Minnesota</option>
+            <option value="Mississippi">Mississippi</option>
+            <option value="Missouri">Missouri</option>
+            <option value="Montana">Montana</option>
+            <option value="Nebraska">Nebraska</option>
+            <option value="Nevada">Nevada</option>
+            <option value="New Hampshire">New Hampshire</option>
+            <option value="New Jersey">New Jersey</option>
+            <option value="New Mexico">New Mexico</option>
+            <option value="New York">New York</option>
+            <option value="North Carolina">North Carolina</option>
+            <option value="North Dakota">North Dakota</option>
+            <option value="Ohio">Ohio</option>
+            <option value="Oklahoma">Oklahoma</option>
+            <option value="Oregon">Oregon</option>
+            <option value="Pennsylvania">Pennsylvania</option>
+            <option value="Rhode Island">Rhode Island</option>
+            <option value="South Carolina">South Carolina</option>
+            <option value="South Dakota">South Dakota</option>
+            <option value="Tennessee">Tennessee</option>
+            <option value="Texas">Texas</option>
+            <option value="Utah">Utah</option>
+            <option value="Vermont">Vermont</option>
+            <option value="Virginia">Virginia</option>
+            <option value="Washington">Washington</option>
+            <option value="West Virginia">West Virginia</option>
+            <option value="Wisconsin">Wisconsin</option>
+            <option value="Wyoming">Wyoming</option>
+          </select>
+          <small className="form-text">City & State</small>
+        </div>
+        <br></br>
+        <br></br>
+        <div style={{ display: 'inline-block', width: '100%' }}>
+          <select
+            type="text"
+            placeholder="Country"
+            name="country"
+            style={{ maxWidth: '49%', float: 'left' }}
+            // value={street}
+            // onChange={(e) => onChange(e)}
+          >
+            <option value="0">Select Country</option>
+            <option value="USA">USA</option>
+            <option value="Canada">Canada</option>
+            <option value="Mexico">Mexico</option>
+          </select>
+          <input
+            type="text"
+            placeholder="ZipCode"
+            name="zipcode"
+            style={{ maxWidth: '49%', float: 'right' }}
+            // value={street}
+            // onChange={(e) => onChange(e)}
+          />
+          <small className="form-text">Country and Zipcode</small>
         </div>
         <div className="form-group">
           <input
@@ -216,7 +317,6 @@ const EditProfile = ({
           </button>
           <span>Optional</span>
         </div>
-
         {displaySocialInputs && (
           <Fragment>
             <div className="form-group social-input">
@@ -275,7 +375,6 @@ const EditProfile = ({
             </div>
           </Fragment>
         )}
-
         <input type="submit" className="btn btn-primary my-1" />
         <Link className="btn btn-light my-1" to="/dashboard">
           Go Back

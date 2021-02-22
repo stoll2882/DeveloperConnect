@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+// import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
@@ -21,6 +22,7 @@ const TwoFactorConfirmation = ({
   twoFactorAuth,
   twoFactorApproved,
   twoFactorAuthCheck,
+  register,
 }) => {
   useEffect(() => {
     twoFactorAuth(email, phoneNumber);
@@ -52,6 +54,10 @@ const TwoFactorConfirmation = ({
   const backClicked = () => {
     window.location.reload();
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   // const generateCode = () => {
   //   const randomCode = Math.floor(100000 + Math.random() * 900000);
@@ -109,6 +115,7 @@ TwoFactorConfirmation.propTypes = {
   twoFactorAuth: PropTypes.func.isRequired,
   twoFactorAuthCheck: PropTypes.func.isRequired,
   twoFactorApproved: PropTypes.bool,
+  register: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -120,4 +127,5 @@ export default connect(mapStateToProps, {
   setAlert,
   twoFactorAuth,
   twoFactorAuthCheck,
+  register,
 })(TwoFactorConfirmation);

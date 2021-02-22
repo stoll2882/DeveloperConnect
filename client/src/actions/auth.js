@@ -198,10 +198,10 @@ export const twoFactorAuth = (email, phoneNumber) => async (dispatch) => {
 };
 
 export const twoFactorAuthCheck = (email, code) => async (dispatch) => {
-  const body = JSON.stringify({ email, code });
+  const body = { email, code };
 
   try {
-    await axios.get('/api/twofa', body);
+    await axios.post('/api/twofa/verify', body);
     dispatch({
       type: TWO_FACTOR_SUCCESS,
     });
