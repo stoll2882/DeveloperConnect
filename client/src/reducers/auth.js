@@ -48,7 +48,7 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         facebookAttempted: false,
-        // twoFactorAttempted: false,
+        twoFactorAttempted: false,
       };
     case TWO_FACTOR_FAILED:
     case REGISTER_FAIL:

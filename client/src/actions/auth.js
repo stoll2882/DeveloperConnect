@@ -17,6 +17,7 @@ import {
   TWO_FACTOR_ATTEMPTED,
   TWO_FACTOR_SUCCESS,
   TWO_FACTOR_FAILED,
+  WELCOME_EMAIL_SENT,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { Fragment } from 'react';
@@ -205,12 +206,14 @@ export const twoFactorAuthCheck = (email, code) => async (dispatch) => {
     dispatch({
       type: TWO_FACTOR_SUCCESS,
     });
+    return true;
 
     // dispatch(setAlert('Text message sent'));
   } catch (err) {
     dispatch({
       type: TWO_FACTOR_FAILED,
     });
+    return false;
     // const errors = err.response.data.errors;
   }
 };
@@ -226,4 +229,23 @@ export const dispatchTwoFactorAuth = (code) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
+};
+
+export const sendWelcomeEmail = (email, name) => async (dispatch) => {
+  const body = { email, name };
+  try {
+    await axios.post('/api/email/welcome', body);
+    dispatch({
+      type: WELCOME_EMAIL_SENT,
+    });
+    return true;
+
+    // dispatch(setAlert('Text message sent'));
+  } catch (err) {
+    dispatch({
+      type: TWO_FACTOR_FAILED,
+    });
+    return false;
+    // const errors = err.response.data.errors;
+  }
 };

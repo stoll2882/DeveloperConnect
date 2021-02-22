@@ -2,7 +2,11 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { register, dispatchExpireCaptcha } from '../../actions/auth';
+import {
+  register,
+  dispatchExpireCaptcha,
+  sendWelcomeEmail,
+} from '../../actions/auth';
 import PhoneInput from 'react-phone-number-input';
 
 import FacebookLogin from './FacebookLogin';
@@ -23,6 +27,7 @@ const FinishRegister = ({
   dispatchExpireCaptcha,
   recaptchaApproved,
   reCaptchaCheck,
+  sendWelcomeEmail,
 }) => {
   const [formData, setFormData] = useState({
     alias: '',
@@ -58,6 +63,7 @@ const FinishRegister = ({
       setAlert('Please verify you are human', 'danger');
     } else {
       const type = 'facebook';
+      sendWelcomeEmail(email, facebookName);
       register(facebookName, email, null, phoneNumber, type, id);
     }
   };
@@ -142,6 +148,7 @@ FinishRegister.propTypes = {
   reCaptchaCheck: PropTypes.func.isRequired,
   dispatchExpireCaptcha: PropTypes.func.isRequired,
   recaptchaApproved: PropTypes.bool,
+  sendWelcomeEmail: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -154,4 +161,5 @@ export default connect(mapStateToProps, {
   register,
   reCaptchaCheck,
   dispatchExpireCaptcha,
+  sendWelcomeEmail,
 })(FinishRegister);

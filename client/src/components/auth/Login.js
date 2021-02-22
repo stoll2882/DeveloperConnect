@@ -18,12 +18,12 @@ export const Login = ({
   login,
   isAuthenticated,
   facebookAttempted,
+  twoFactorAttempted,
   recaptchaApproved,
   dispatchExpireCaptcha,
   dispatchTwoFactorAuth,
   reCaptchaCheck,
   setAlert,
-  twoFactorAttempted,
 }) => {
   if (facebookAttempted) {
     window.location.reload();

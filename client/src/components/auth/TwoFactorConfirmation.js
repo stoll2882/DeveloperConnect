@@ -8,6 +8,7 @@ import {
   dispatchExpireCaptcha,
   twoFactorAuth,
   twoFactorAuthCheck,
+  sendWelcomeEmail,
 } from '../../actions/auth';
 import PhoneInput from 'react-phone-number-input';
 import PropTypes from 'prop-types';
@@ -23,6 +24,7 @@ const TwoFactorConfirmation = ({
   twoFactorApproved,
   twoFactorAuthCheck,
   register,
+  sendWelcomeEmail,
 }) => {
   useEffect(() => {
     twoFactorAuth(email, phoneNumber);
@@ -31,6 +33,8 @@ const TwoFactorConfirmation = ({
 
   const [twoFactorAuthCode, setTwoFactorAuthCode] = useState('');
 
+  var approved = twoFactorApproved;
+
   const checkConfirmationCode = (value) => {
     setConfirmationCode(value);
     twoFactorAuthCheck(email, confirmationCode);
@@ -38,11 +42,12 @@ const TwoFactorConfirmation = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await twoFactorAuthCheck(email, confirmationCode);
-    if (!twoFactorApproved) {
+    const result = await twoFactorAuthCheck(email, confirmationCode);
+    if (!result) {
       setAlert('Security Code Incorrect', 'danger');
     } else {
       const type = 'self';
+      sendWelcomeEmail(email, name);
       register(name, email, password, phoneNumber, type, null);
     }
   };
@@ -66,6 +71,7 @@ const TwoFactorConfirmation = ({
 
   const handleCodeChange = (event) => {
     setConfirmationCode(event.target.value);
+    // twoFactorAuthCheck(email, event.target.value);
     // twoFactorAuthCheck(email, confirmationCode);
   };
 
@@ -116,6 +122,7 @@ TwoFactorConfirmation.propTypes = {
   twoFactorAuthCheck: PropTypes.func.isRequired,
   twoFactorApproved: PropTypes.bool,
   register: PropTypes.func.isRequired,
+  sendWelcomeEmail: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -128,4 +135,5 @@ export default connect(mapStateToProps, {
   twoFactorAuth,
   twoFactorAuthCheck,
   register,
+  sendWelcomeEmail,
 })(TwoFactorConfirmation);
