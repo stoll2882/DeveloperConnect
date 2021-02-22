@@ -47,7 +47,7 @@ const TwoFactorConfirmation = ({
       setAlert('Security Code Incorrect', 'danger');
     } else {
       const type = 'self';
-      sendWelcomeEmail(email, name);
+      // sendWelcomeEmail(email, name);
       register(name, email, password, phoneNumber, type, null);
     }
   };
@@ -61,6 +61,7 @@ const TwoFactorConfirmation = ({
   };
 
   if (isAuthenticated) {
+    // sendWelcomeEmail(email, name);
     return <Redirect to="/dashboard" />;
   }
 

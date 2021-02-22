@@ -63,7 +63,7 @@ const FinishRegister = ({
       setAlert('Please verify you are human', 'danger');
     } else {
       const type = 'facebook';
-      sendWelcomeEmail(email, facebookName);
+      // sendWelcomeEmail(email, facebookName);
       register(facebookName, email, null, phoneNumber, type, id);
     }
   };

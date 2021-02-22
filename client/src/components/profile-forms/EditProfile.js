@@ -126,6 +126,7 @@ const EditProfile = ({
         profile stand out
       </p>
       <small>* = required field</small>
+      <CountrySelector />
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <select name="status" value={status} onChange={(e) => onChange(e)}>

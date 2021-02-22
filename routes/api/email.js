@@ -25,8 +25,8 @@ router.post('/welcome', async (req, res) => {
   var mail = {
     from: SITE_EMAIL,
     to: email,
-    subject: 'New Custom Order',
-    text: `Hi ${name}, \n\nMy name is Sam Toll, and I am one of the developer of Developer Connect. I wanted to thank you for joining our site, and let you know I am here if I can help with anything. \nDeveloper Connect is a platform for developers to be able to share their accomplishments as well as communicate with one another. \n\nMy email is ${SITE_EMAIL}, and feel free to reach out if you have any questions at all! \n\n Thank you, \n\n Sam Toll`,
+    subject: 'Welcome to Developer Connect',
+    text: `Hi ${name}, \n\nMy name is Sam Toll, and I am one of the developer of Developer Connect. I wanted to thank you for joining our site, and personally welcome you to our community. Developer Connect is a platform for developers to be able to share their accomplishments as well as communicate with one another, and I hope you come to enjoy it as much as I do! \n\nFeel free to reach out if you have any questions at all! \n\n Thank you, \n\n Sam Toll \n${SITE_EMAIL}`,
   };
   transporter.sendMail(mail, (err, data) => {
     if (err) {

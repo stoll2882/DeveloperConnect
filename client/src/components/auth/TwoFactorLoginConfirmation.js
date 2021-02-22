@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import {
-  register,
+  login,
   dispatchExpireCaptcha,
   twoFactorAuth,
   twoFactorAuthCheck,
@@ -14,16 +14,16 @@ import PropTypes from 'prop-types';
 
 const TwoFactorLoginConfirmation = ({
   email,
-  password,
   setAlert,
   isAuthenticated,
   twoFactorAuth,
   twoFactorApproved,
   twoFactorAuthCheck,
-  register,
+  login,
+  auth: { user },
 }) => {
   useEffect(() => {
-    twoFactorAuth(email, phoneNumber);
+    twoFactorAuth(email, user.phoneNumber);
   }, [twoFactorAuth]);
   const [confirmationCode, setConfirmationCode] = useState('');
 
@@ -34,14 +34,13 @@ const TwoFactorLoginConfirmation = ({
     twoFactorAuthCheck(email, confirmationCode);
   };
 
+  //   const phone = user.phoneNumber;
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    await twoFactorAuthCheck(email, confirmationCode);
-    if (!twoFactorApproved) {
+    const result = await twoFactorAuthCheck(email, confirmationCode);
+    if (!result) {
       setAlert('Security Code Incorrect', 'danger');
-    } else {
-      const type = 'self';
-      register(name, email, password, phoneNumber, type, null);
     }
   };
 
@@ -53,7 +52,7 @@ const TwoFactorLoginConfirmation = ({
     window.location.reload();
   };
 
-  if (isAuthenticated) {
+  if (twoFactorApproved && isAuthenticated) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -74,14 +73,14 @@ const TwoFactorLoginConfirmation = ({
       </button>
       <br></br>
       <br></br>
-      <h1 className="large text-primary">Please verify it is you, {name}</h1>
+      {/* <h1 className="large text-primary">Please verify it is you, {name}</h1> */}
       {/* <h2>Name: {name}</h2>
       <h2>Email: {email}</h2>
       <h2>Password: {password}</h2>
       <h2>Code: {twoFactorAuthCode}</h2> */}
       <h2>
         Security code sent to: ******
-        {phoneNumber.substr(phoneNumber.length - 4)}
+        {user.phoneNumber.substr(user.phoneNumber.length - 4)}
       </h2>
       {/* <h2>{id}</h2> */}
       <form className="form" onSubmit={(e) => onSubmit(e)}>
@@ -113,17 +112,19 @@ TwoFactorLoginConfirmation.propTypes = {
   twoFactorAuth: PropTypes.func.isRequired,
   twoFactorAuthCheck: PropTypes.func.isRequired,
   twoFactorApproved: PropTypes.bool,
-  register: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   twoFactorApproved: state.auth.twoFactorApproved,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
   setAlert,
   twoFactorAuth,
   twoFactorAuthCheck,
-  register,
+  login,
 })(TwoFactorLoginConfirmation);

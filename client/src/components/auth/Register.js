@@ -8,6 +8,7 @@ import {
   dispatchExpireCaptcha,
   twoFactorAuth,
   dispatchTwoFactorAuth,
+  sendWelcomeEmail,
 } from '../../actions/auth';
 import FacebookLoginWithButton from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
@@ -33,6 +34,7 @@ const Register = ({
   twoFactorAttempted,
   twoFactorAuth,
   dispatchTwoFactorAuth,
+  sendWelcomeEmail,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -53,6 +55,8 @@ const Register = ({
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
   const [twoFactorAuthCode, setTwoFactorAuthCode] = useState('');
+
+  const [googleObj, setGoogleObj] = useState(null);
 
   const {
     name,
@@ -77,7 +81,7 @@ const Register = ({
       setAlert('Passwords do not match', 'danger');
     } else if (!privacyPolicyAccepted) {
       setAlert('Please accept the terms and conditions', 'danger');
-    } else if (human == false) {
+    } else if (human == true) {
       setAlert('Please verify you are human', 'danger');
     } else {
       // generateCode();
@@ -98,6 +102,7 @@ const Register = ({
   };
 
   if (isAuthenticated) {
+    sendWelcomeEmail(email, name);
     return <Redirect to="/dashboard" />;
   }
 
@@ -116,7 +121,31 @@ const Register = ({
       callback={facebookResponse}
       icon="fa-facebook"
       textButton="Register with Facebook"
+      // buttonStyle={{
+      //   // height: '50px',
+      //   textAlign: 'center',
+      //   alignContent: 'center',
+      //   alignItems: 'center',
+      //   borderRadius: '100px',
+      //   padding: '-100px',
+      // }}
       // onClick={facebookClicked}
+    />
+  );
+
+  const GoogleLoginButton = () => (
+    <GoogleLogin
+      clientId="753445575160-cajf8p3ntsdrkhj6s744a7gflmdscd0j.apps.googleusercontent.com"
+      buttonText="Register with Google"
+      onSuccess={responseGoogle}
+      onFailure={responseGoogle}
+      cookiePolicy={'single_host_origin'}
+      type="dark"
+      // style={{
+      //   height: '100px',
+      //   padding: '20px',
+      //   background: 'red',
+      // }}
     />
   );
 
@@ -140,6 +169,12 @@ const Register = ({
 
   const responseGoogle = async (response) => {
     console.log(response);
+    setGoogleObj(response.profileObj);
+    // setFormData({
+    //   name: response.profileObj.name,
+    //   email: response.profileObj.email,
+    //   id: response.googleId,
+    // });
   };
 
   // const generateCode = () => {
@@ -160,19 +195,17 @@ const Register = ({
             <p className="lead">
               <i className="fas fa-user"></i> Create Your Account
             </p>
-            {/* <GoogleLogin
-            clientId="753445575160-cajf8p3ntsdrkhj6s744a7gflmdscd0j.apps.googleusercontent.com"
-            buttonText="Log in with Google"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={'single_host_origin'}
-          /> */}
             <FacebookLoginButton onChange={facebookChosen} />
+            <br></br>
+            <br></br>
+            <GoogleLoginButton />
+            <br></br>
+            <hi>{googleObj}</hi>
             <br></br>
             <form className="form" onSubmit={(e) => onSubmit(e)}>
               <small className="form-text">
-                If you do not register with facebook, you will be prompted for
-                two-factor-authentication
+                If you do not register with facebook or google, you will be
+                prompted for two-factor-authentication
               </small>
               <div className="form-group">
                 <input
@@ -299,6 +332,7 @@ Register.propTypes = {
   facebookAttempted: PropTypes.bool,
   twoFactorAttempted: PropTypes.bool,
   dispatchTwoFactorAuth: PropTypes.func.isRequired,
+  sendWelcomeEmail: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -316,4 +350,5 @@ export default connect(mapStateToProps, {
   dispatchExpireCaptcha,
   twoFactorAuth,
   dispatchTwoFactorAuth,
+  sendWelcomeEmail,
 })(Register);

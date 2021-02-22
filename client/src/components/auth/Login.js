@@ -12,7 +12,7 @@ import FacebookReLogin from './FacebookReLogin';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { reCaptchaCheck } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
-import TwoFactorConfirmation from './TwoFactorConfirmation';
+import TwoFactorLoginConfirmation from './TwoFactorLoginConfirmation';
 
 export const Login = ({
   login,
@@ -24,6 +24,7 @@ export const Login = ({
   dispatchTwoFactorAuth,
   reCaptchaCheck,
   setAlert,
+  auth: { user },
 }) => {
   if (facebookAttempted) {
     window.location.reload();
@@ -42,11 +43,11 @@ export const Login = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (human == false) {
+    if (human == true) {
       setAlert('Please verify you are human', 'danger');
     } else {
-      // dispatchTwoFactorAuth();
       login(email, password, null);
+      // dispatchTwoFactorAuth();
     }
   };
 
@@ -110,12 +111,7 @@ export const Login = ({
         </Fragment>
       ) : (
         <Fragment />
-        // <TwoFactorConfirmation
-        //   name={name}
-        //   email={email}
-        //   password={password}
-        //   phoneNumber={phoneNumber}
-        // />
+        // <TwoFactorLoginConfirmation email={email} user={user} />
       )}
     </Fragment>
   );
@@ -138,6 +134,7 @@ const mapStateToProps = (state) => ({
   facebookAttempted: state.auth.facebookAttempted,
   recaptchaApproved: state.auth.recaptchaApproved,
   twoFactorAttempted: state.auth.twoFactorAttempted,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
