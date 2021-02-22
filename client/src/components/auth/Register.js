@@ -86,7 +86,7 @@ const Register = ({
       setAlert('Passwords do not match', 'danger');
     } else if (!privacyPolicyAccepted) {
       setAlert('Please accept the terms and conditions', 'danger');
-    } else if (human == true) {
+    } else if (human == false) {
       setAlert('Please verify you are human', 'danger');
     } else {
       // generateCode();

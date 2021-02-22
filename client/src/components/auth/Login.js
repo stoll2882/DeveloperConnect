@@ -44,12 +44,12 @@ export const Login = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (human == true) {
-      setAlert('Please verify you are human', 'danger');
-    } else {
-      login(email, password, null);
-      // dispatchTwoFactorAuth();
-    }
+    // if (human == true) {
+    //   setAlert('Please verify you are human', 'danger');
+    // } else {
+    // login(email, password, null);
+    dispatchTwoFactorAuth();
+    // }
   };
 
   const verifyCaptcha = (response) => {
@@ -62,9 +62,9 @@ export const Login = ({
   };
 
   // Redirect if logged in
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
+  // if (isAuthenticated) {
+  //   return <Redirect to="/twofactorloginconfirmation" />;
+  // }
 
   return (
     <Fragment>
@@ -114,8 +114,8 @@ export const Login = ({
           </p>
         </Fragment>
       ) : (
-        <Fragment />
-        // <TwoFactorLoginConfirmation email={email} user={user} />
+        // <Fragment />
+        <TwoFactorLoginConfirmation email={email} />
       )}
     </Fragment>
   );
