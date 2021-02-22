@@ -5,6 +5,7 @@ import { setAlert } from '../../actions/alert';
 import {
   register,
   attemptFacebook,
+  attemptGoogle,
   dispatchExpireCaptcha,
   twoFactorAuth,
   dispatchTwoFactorAuth,
@@ -26,11 +27,13 @@ const Register = ({
   setAlert,
   register,
   attemptFacebook,
+  attemptGoogle,
   reCaptchaCheck,
   dispatchExpireCaptcha,
   isAuthenticated,
   recaptchaApproved,
   facebookAttempted,
+  googleAttempted,
   twoFactorAttempted,
   twoFactorAuth,
   dispatchTwoFactorAuth,
@@ -42,6 +45,7 @@ const Register = ({
     password: '',
     password2: '',
     id: '',
+    type: '',
     facebookOption: false,
     phoneNumber: '',
   });
@@ -56,7 +60,7 @@ const Register = ({
 
   const [twoFactorAuthCode, setTwoFactorAuthCode] = useState('');
 
-  const [googleObj, setGoogleObj] = useState(null);
+  const [googleObj, setGoogleObj] = useState([]);
 
   const {
     name,
@@ -64,13 +68,14 @@ const Register = ({
     password,
     password2,
     id,
+    type,
     facebookOption,
     phoneNumber,
   } = formData;
 
   var human = recaptchaApproved;
 
-  const type = 'self';
+  // const type = 'self';
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -164,17 +169,19 @@ const Register = ({
       name: response.name,
       email: response.email,
       id: response.id,
+      type: 'facebook',
     });
   };
 
   const responseGoogle = async (response) => {
-    console.log(response);
-    setGoogleObj(response.profileObj);
-    // setFormData({
-    //   name: response.profileObj.name,
-    //   email: response.profileObj.email,
-    //   id: response.googleId,
-    // });
+    await attemptGoogle();
+    setFormData({
+      name: response.profileObj.name,
+      email: response.profileObj.email,
+      id: response.googleId,
+      type: 'google',
+    });
+    console.log(type);
   };
 
   // const generateCode = () => {
@@ -188,7 +195,7 @@ const Register = ({
 
   return (
     <Fragment>
-      {!facebookAttempted ? (
+      {!facebookAttempted && !googleAttempted ? (
         !twoFactorAttempted ? (
           <Fragment>
             <h1 className="large text-primary">Register</h1>
@@ -200,8 +207,9 @@ const Register = ({
             <br></br>
             <GoogleLoginButton />
             <br></br>
-            <hi>{googleObj}</hi>
             <br></br>
+            <h2>------------------OR-------------------</h2>
+            {/* <br></br> */}
             <form className="form" onSubmit={(e) => onSubmit(e)}>
               <small className="form-text">
                 If you do not register with facebook or google, you will be
@@ -313,7 +321,8 @@ const Register = ({
           facebookName={name}
           email={email}
           id={id}
-          twoFactorAuthCode={twoFactorAuthCode}
+          type={type}
+          // twoFactorAuthCode={twoFactorAuthCode}
         />
       )}
     </Fragment>
@@ -324,12 +333,14 @@ Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   attemptFacebook: PropTypes.func.isRequired,
+  attemptGoogle: PropTypes.func.isRequired,
   reCaptchaCheck: PropTypes.func.isRequired,
   twoFactorAuth: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   dispatchExpireCaptcha: PropTypes.func.isRequired,
   recaptchaApproved: PropTypes.bool,
   facebookAttempted: PropTypes.bool,
+  googleAttempted: PropTypes.bool,
   twoFactorAttempted: PropTypes.bool,
   dispatchTwoFactorAuth: PropTypes.func.isRequired,
   sendWelcomeEmail: PropTypes.func.isRequired,
@@ -340,6 +351,7 @@ const mapStateToProps = (state) => ({
   recaptchaApproved: state.auth.recaptchaApproved,
   facebookAttempted: state.auth.facebookAttempted,
   twoFactorAttempted: state.auth.twoFactorAttempted,
+  googleAttempted: state.auth.googleAttempted,
 });
 
 export default connect(mapStateToProps, {
@@ -347,6 +359,7 @@ export default connect(mapStateToProps, {
   register,
   reCaptchaCheck,
   attemptFacebook,
+  attemptGoogle,
   dispatchExpireCaptcha,
   twoFactorAuth,
   dispatchTwoFactorAuth,

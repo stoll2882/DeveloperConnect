@@ -9,6 +9,7 @@ import {
   dispatchTwoFactorAuth,
 } from '../../actions/auth';
 import FacebookReLogin from './FacebookReLogin';
+import GmailReLogin from './GmalReLogin';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { reCaptchaCheck } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
@@ -74,6 +75,9 @@ export const Login = ({
             <i className="fas fa-user"></i> Sign Into Your Account
           </p>
           <FacebookReLogin />
+          <br></br>
+          <br></br>
+          <GmailReLogin />
           <form className="form" onSubmit={(e) => onSubmit(e)}>
             <div className="form-group">
               <input

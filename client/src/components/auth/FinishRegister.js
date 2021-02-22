@@ -21,6 +21,7 @@ const FinishRegister = ({
   facebookName,
   email,
   id,
+  type,
   setAlert,
   register,
   isAuthenticated,
@@ -62,8 +63,8 @@ const FinishRegister = ({
     } else if (human == false) {
       setAlert('Please verify you are human', 'danger');
     } else {
-      const type = 'facebook';
-      // sendWelcomeEmail(email, facebookName);
+      // const type = 'facebook';
+      console.log(type);
       register(facebookName, email, null, phoneNumber, type, id);
     }
   };

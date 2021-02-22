@@ -14,6 +14,7 @@ import {
   TWO_FACTOR_ATTEMPTED,
   TWO_FACTOR_SUCCESS,
   TWO_FACTOR_FAILED,
+  GOOGLE_REGISTER_ATTEMPTED,
 } from '../actions/types';
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
   isAuthenticated: null,
   recaptchaApproved: false,
   facebookAttempted: false,
+  googleAttempted: false,
   twoFactorAttempted: false,
   twoFactorApproved: false,
   loading: true,
@@ -37,6 +39,7 @@ export default function (state = initialState, action) {
         loading: false,
         user: payload,
         facebookAttempted: false,
+        googleAttempted: false,
         // twoFactorAttempted: false,
       };
     case LOGIN_SUCCESS:
@@ -48,6 +51,7 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         facebookAttempted: false,
+        googleAttempted: false,
         twoFactorAttempted: false,
       };
     case TWO_FACTOR_FAILED:
@@ -63,6 +67,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         loading: false,
         facebookAttempted: false,
+        googleAttempted: false,
         twoFactorApproved: false,
         // twoFactorAttempted: false,
         // twoFactorAttempted: false,
@@ -87,6 +92,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         facebookAttempted: true,
+      };
+    case GOOGLE_REGISTER_ATTEMPTED:
+      return {
+        ...state,
+        googleAttempted: true,
       };
     case TWO_FACTOR_SUCCESS:
       return {

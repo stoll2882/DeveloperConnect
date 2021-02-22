@@ -18,6 +18,8 @@ import {
   TWO_FACTOR_SUCCESS,
   TWO_FACTOR_FAILED,
   WELCOME_EMAIL_SENT,
+  GOOGLE_REGISTER_ATTEMPTED,
+  WELCOME_EMAIL_FAILED,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { Fragment } from 'react';
@@ -65,6 +67,10 @@ export const register = (
   if (type == 'facebook') {
     dispatch({
       type: FACEBOOK_REGISTER_ATTEMPTED,
+    });
+  } else if (type == 'google') {
+    dispatch({
+      type: GOOGLE_REGISTER_ATTEMPTED,
     });
   }
   var body;
@@ -225,6 +231,12 @@ export const dispatchTwoFactorAuth = (code) => async (dispatch) => {
   });
 };
 
+export const attemptGoogle = () => (dispatch) => {
+  dispatch({
+    type: GOOGLE_REGISTER_ATTEMPTED,
+  });
+};
+
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
@@ -238,12 +250,14 @@ export const sendWelcomeEmail = (email, name) => async (dispatch) => {
     dispatch({
       type: WELCOME_EMAIL_SENT,
     });
+    console.log('sending welcome email...');
+    sendWelcomeEmail(email, name);
     return true;
 
     // dispatch(setAlert('Text message sent'));
   } catch (err) {
     dispatch({
-      type: TWO_FACTOR_FAILED,
+      type: WELCOME_EMAIL_FAILED,
     });
     return false;
     // const errors = err.response.data.errors;
