@@ -31,6 +31,9 @@ export const Login = ({
   if (facebookAttempted) {
     window.location.reload();
   }
+  // } else if (twoFactorAttempted) {
+  //   window.location.reload();
+  // }
   const [formData, setFormData] = useState({
     email: '',
     password: '',
