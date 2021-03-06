@@ -20,6 +20,7 @@ app.use('/api/recaptcha', require('./routes/api/recaptcha'));
 app.use('/api/textmessage', require('./routes/api/textmessage'));
 app.use('/api/twofa', require('./routes/api/twofa'));
 app.use('/api/email', require('./routes/api/email'));
+app.use('/api/image', require('./routes/api/image'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

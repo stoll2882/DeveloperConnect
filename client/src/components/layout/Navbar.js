@@ -17,6 +17,9 @@ export const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <Link to="/contact">Contact Us</Link>
       </li>
       <li>
+        <Link to="/donations">Donate</Link>
+      </li>
+      <li>
         <Link to="/dashboard">
           <i className="fas fa-user"></i>{' '}
           <span className="hide-sm">Dashboard</span>

@@ -70,9 +70,9 @@ const TwoFactorLoginConfirmation = ({
 
   return (
     <Fragment>
-      <button className="btn" onClick={backClicked}>
+      {/* <button className="btn" onClick={backClicked}>
         Cancel
-      </button>
+      </button> */}
       <br></br>
       <br></br>
       {/* <h1 className="large text-primary">Please verify it is you, {name}</h1> */}

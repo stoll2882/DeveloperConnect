@@ -22,16 +22,21 @@ const Dashboard = ({
   ) : (
     <Fragment>
       <h1 className="large text-primary">Dashboard</h1>
+      <img
+        src={user.avatar}
+        alt="user avatar"
+        className="round-img"
+        style={{ maxWidth: '130px' }}
+      />
       <p className="lead">
-        <i className="fas fa-user"></i>
-        Welcome {user && user.name}
+        <i className="fas fa-user"></i> Welcome {user && user.name}
       </p>
       {profile !== null ? (
         <Fragment>
           <DashboardActions />
+
           <Experience experience={profile.experience} />
           <Education education={profile.education} />
-
           <div className="my-w">
             <button className="btn btn-danger" onClick={() => deleteAccount()}>
               <i className="fas fa-user-minus"></i> Delete My Account

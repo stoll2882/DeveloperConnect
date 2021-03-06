@@ -12,6 +12,7 @@ import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/profile-forms/CreateProfile';
 import EditProfile from './components/profile-forms/EditProfile';
+import EditPicture from './components/profile-forms/EditPicture';
 import AddExperience from './components/profile-forms/AddExperience';
 import AddEducation from './components/profile-forms/AddEducation';
 import Profiles from './components/profiles/Profiles';
@@ -19,6 +20,7 @@ import Profile from './components/profile/Profile';
 import Posts from './components/posts/Posts';
 import Post from './components/post/Post';
 import Contact from './components/auth/Contact';
+import Donations from './components/auth/Donations';
 import PrivateRoute from './components/routing/PrivateRoute';
 
 // Redux
@@ -84,9 +86,15 @@ const App = () => {
                 path="/add-education"
                 component={AddEducation}
               />
+              <PrivateRoute
+                exact
+                path="/edit-picture"
+                component={EditPicture}
+              />
               <PrivateRoute exact path="/posts" component={Posts} />
               <PrivateRoute exact path="/posts/:id" component={Post} />
               <PrivateRoute exact path="/contact" component={Contact} />
+              <PrivateRoute exact path="/donations" component={Donations} />
             </Switch>
           </section>
         </Fragment>

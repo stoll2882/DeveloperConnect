@@ -48,11 +48,14 @@ export const Login = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // if (human == true) {
-    //   setAlert('Please verify you are human', 'danger');
-    // } else {
-    login(email, password, null);
-    dispatchTwoFactorAuth();
+    if (human == false) {
+      setAlert('Please verify you are human', 'danger');
+    } else {
+      await login(email, password, null);
+      // if (!facebookAttempted && !googleAttempted) {
+      //   dispatchTwoFactorAuth();
+      // }
+    }
     // }
   };
 
@@ -72,55 +75,55 @@ export const Login = ({
 
   return (
     <Fragment>
-      {!isAuthenticated ? (
-        <Fragment>
-          <h1 className="large text-primary">Login</h1>
-          <p className="lead">
-            <i className="fas fa-user"></i> Sign Into Your Account
-          </p>
-          <FacebookReLogin />
-          <br></br>
-          <br></br>
-          <GmailReLogin />
-          <form className="form" onSubmit={(e) => onSubmit(e)}>
-            <div className="form-group">
-              <input
-                type="email"
-                placeholder="Email Address"
-                name="email"
-                value={email}
-                onChange={(e) => onChange(e)}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                minLength="6"
-                value={password}
-                onChange={(e) => onChange(e)}
-                required
-              />
-            </div>
-            <ReCAPTCHA
-              sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
-              render="explicit"
-              onChange={verifyCaptcha}
-              onExpired={expireCaptcha}
+      {/* {!isAuthenticated || facebookAttempted || googleAttempted ? ( */}
+      <Fragment>
+        <h1 className="large text-primary">Login</h1>
+        <p className="lead">
+          <i className="fas fa-user"></i> Sign Into Your Account
+        </p>
+        <FacebookReLogin />
+        <br></br>
+        <br></br>
+        <GmailReLogin />
+        <form className="form" onSubmit={(e) => onSubmit(e)}>
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              value={email}
+              onChange={(e) => onChange(e)}
+              required
             />
-            <br></br>
-            <input type="submit" className="btn btn-primary" value="Login" />
-          </form>
-          <p className="my-1">
-            Don't have an account? <Link to="/register">Sign Up</Link>
-          </p>
-        </Fragment>
-      ) : (
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              minLength="6"
+              value={password}
+              onChange={(e) => onChange(e)}
+              required
+            />
+          </div>
+          <ReCAPTCHA
+            sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+            render="explicit"
+            onChange={verifyCaptcha}
+            onExpired={expireCaptcha}
+          />
+          <br></br>
+          <input type="submit" className="btn btn-primary" value="Login" />
+        </form>
+        <p className="my-1">
+          Don't have an account? <Link to="/register">Sign Up</Link>
+        </p>
+      </Fragment>
+      {/* ) : (
         // <Fragment />
         <TwoFactorLoginConfirmation email={email} />
-      )}
+      )} */}
     </Fragment>
   );
 };

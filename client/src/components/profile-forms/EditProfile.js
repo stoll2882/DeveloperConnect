@@ -32,10 +32,18 @@ const EditProfile = ({
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
   const countryOptions = useMemo(() => countryList().getData(), []);
+  const [country, setCountry] = useState('United States');
 
   const CountrySelector = () => {
     const countryOptions = useMemo(() => countryList().getData(), []);
-    return <Select options={countryOptions} />;
+    return (
+      <Select
+        options={countryOptions}
+        value={country}
+        onChange={(val) => setCountry(val)}
+        placeholder="Select Country..."
+      />
+    );
   };
 
   useEffect(() => {
@@ -126,7 +134,6 @@ const EditProfile = ({
         profile stand out
       </p>
       <small>* = required field</small>
-      <CountrySelector />
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <select name="status" value={status} onChange={(e) => onChange(e)}>
@@ -246,33 +253,23 @@ const EditProfile = ({
             <option value="Wisconsin">Wisconsin</option>
             <option value="Wyoming">Wyoming</option>
           </select>
-          <small className="form-text">City & State</small>
         </div>
+        <small className="form-text">City & State</small>
         <br></br>
-        <br></br>
-        <div style={{ display: 'inline-block', width: '100%' }}>
-          <select
-            type="text"
-            placeholder="Country"
-            name="country"
-            style={{ maxWidth: '49%', float: 'left' }}
-            // value={street}
-            // onChange={(e) => onChange(e)}
-          >
-            <option value="0">Select Country</option>
-            <option value="USA">USA</option>
-            <option value="Canada">Canada</option>
-            <option value="Mexico">Mexico</option>
-          </select>
+        <div>
           <input
             type="text"
             placeholder="ZipCode"
             name="zipcode"
-            style={{ maxWidth: '49%', float: 'right' }}
+            // style={{ maxWidth: '49%', float: 'right' }}
             // value={street}
             // onChange={(e) => onChange(e)}
           />
-          <small className="form-text">Country and Zipcode</small>
+          <small className="form-text">Zipcode</small>
+        </div>
+        <div className="form-group">
+          <CountrySelector />
+          <small className="form-text">Select Country</small>
         </div>
         <div className="form-group">
           <input

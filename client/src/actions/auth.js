@@ -263,3 +263,17 @@ export const sendWelcomeEmail = (email, name) => async (dispatch) => {
     // const errors = err.response.data.errors;
   }
 };
+
+export const uploadProfilePicture = (file, id) => async (dispatch) => {
+  try {
+    var result = await axios.get('/api/image');
+    console.log(result.data);
+    const response = await fetch(result.data, {
+      method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+      body: file[0], // body data type must match "Content-Type" header
+    });
+    await axios.post('/api/image');
+  } catch (error) {
+    console.log(error);
+  }
+};
