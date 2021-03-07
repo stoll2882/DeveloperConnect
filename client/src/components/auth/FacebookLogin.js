@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import FacebookLoginWithButton from 'react-facebook-login';
 import { setAlert } from '../../actions/alert';
-import { register, attemptFacebook } from '../../actions/auth';
+import { register, attemptFacebook, uploadProfilePicture } from '../../actions/auth';
 import FinishRegister from './FinishRegister';
 
 const FacebookLogin = ({
@@ -13,10 +13,12 @@ const FacebookLogin = ({
   isAuthenticated,
   facebookAttempted,
   attemptFacebook,
+  uploadProfilePicture,
 }) => {
   var [name, setName] = useState('');
   var [email, setEmail] = useState('');
   var [id, setId] = useState('');
+  var [picture, setPicture] = useState('');
 
   const type = 'facebook';
 
@@ -34,34 +36,11 @@ const FacebookLogin = ({
     />
   );
 
-  // const facebookClicked = () => {
-  //   return (
-  //     <Redirect
-  //       to={{
-  //         pathname: '/finishregister',
-  //         state: { facebookName: { name }, email: { email }, id: { id } },
-  //       }}
-  //     />
-  //   );
-  // };
-
   const facebookResponse = async (response) => {
     setName(response.name);
     setEmail(response.email);
     setId(response.id);
   };
-
-  // if (name) {
-  //   return (
-  //     <Redirect
-  //       to={{
-  //         pathname: '/finishregister',
-  //         state: { facebookName: { name }, email, id },
-  //         // state: { facebookName: { name }, email: { email }, id: { id } },
-  //       }}
-  //     />
-  //   );
-  // }
 
   return (
     <Fragment>
@@ -82,6 +61,7 @@ FacebookLogin.propTypes = {
   isAuthenticated: PropTypes.bool,
   facebookAttempted: PropTypes.bool,
   attemptFacebook: PropTypes.func.isRequired,
+  uploadProfilePicture: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -93,4 +73,5 @@ export default connect(mapStateToProps, {
   setAlert,
   register,
   attemptFacebook,
+  uploadProfilePicture,
 })(FacebookLogin);

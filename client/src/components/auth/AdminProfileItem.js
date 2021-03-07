@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { adminDeleteUser, deleteAccount } from '../../actions/profile';
 
-const ProfileItem = ({
+const AdminProfileItem = ({
   profile: {
     user: { _id, name, avatar },
     status,
@@ -10,6 +12,7 @@ const ProfileItem = ({
     location,
     skills,
   },
+  adminDeleteUser,
 }) => {
   return (
     <div className="profile bg-light">
@@ -24,6 +27,13 @@ const ProfileItem = ({
         <Link to={`/profile/${_id}`} className="btn btn-primary">
           View Profile
         </Link>
+        <br></br>
+        <br></br>
+        <div className="my-w">
+            <button className="btn btn-danger" onClick={() => adminDeleteUser(_id, name)}>
+            <i className="fas fa-user-minus"></i> Delete User
+            </button>
+        </div>
       </div>
       <ul>
         {skills.slice(0, 4).map((skill, index) => (
@@ -36,8 +46,9 @@ const ProfileItem = ({
   );
 };
 
-ProfileItem.propTypes = {
+AdminProfileItem.propTypes = {
   profile: PropTypes.object.isRequired,
+  adminDeleteUser: PropTypes.func.isRequired,
 };
 
-export default ProfileItem;
+export default connect(null, { adminDeleteUser })(AdminProfileItem);

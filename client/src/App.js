@@ -22,6 +22,7 @@ import Post from './components/post/Post';
 import Contact from './components/auth/Contact';
 import Donations from './components/auth/Donations';
 import PrivateRoute from './components/routing/PrivateRoute';
+import Admin from './components/auth/Admin';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -95,6 +96,7 @@ const App = () => {
               <PrivateRoute exact path="/posts/:id" component={Post} />
               <PrivateRoute exact path="/contact" component={Contact} />
               <PrivateRoute exact path="/donations" component={Donations} />
+              <PrivateRoute exact path="/admin" component={Admin} />
             </Switch>
           </section>
         </Fragment>

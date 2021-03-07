@@ -127,6 +127,26 @@ router.delete('/', auth, async (req, res) => {
   }
 });
 
+// @route   DELETE api/profile/admin/:user_id
+// @desc    Delete profile, user & posts from admin
+// @access  Private
+router.delete('/admin/:id', auth, async (req, res) => {
+  userId = req.params.id;
+  try {
+    // Remove users posts
+    await Post.deleteMany({ user: userId });
+    // Remove profile
+    await Profile.findOneAndRemove({ user: userId });
+    // Remove User
+    await User.findOneAndRemove({ _id: userId });
+
+    res.json({ msg: 'User deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 // @route   GET api/profile/user/:user_id
 // @desc    Get profile by user ID
 // @access  Public

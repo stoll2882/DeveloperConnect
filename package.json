@@ -26,6 +26,7 @@
   "homepage": "https://github.com/stoll2882/DeveloperConnect#readme",
   "dependencies": {
     "@auth0/auth0-react": "^1.2.0",
+    "@azure/storage-blob": "^12.4.1",
     "@babel/core": "^7.12.13",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-syntax-class-properties": "^7.12.1",

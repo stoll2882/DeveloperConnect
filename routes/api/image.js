@@ -5,27 +5,20 @@ const auth = require('../../middleware/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
-
 const User = require('../../models/User');
-const { Storage } = require('@google-cloud/storage');
+const { BlobServiceClient, ContainerClient, BlobSASPermissions } = require('@azure/storage-blob');
 
-const GOOGLE_KEY = config.get('images.key');
-const GOOGLE_SECRET = config.get('images.secret');
+function generateProfileFilename(userid) {
+  return "profile-"+userid;
+}
 
 // @route    GET api/image
 // @desc     Get user by token
 // @access   Private
 router.get('/', auth, async (req, res) => {
-  const url = await gcsSignedUrl(req.user.id, 360);
-  res.send(url);
+  const url = await getAzureSignedUrl(generateProfileFilename(req.user.id), 360);
+  res.send(url).end();
   console.log(url);
-  //   try {
-  //     const user = await User.findById(req.user.id).select('avatar');
-  //     res.json(user);
-  //   } catch (err) {
-  //     console.error(err.message);
-  //     // res.status(500).send('Server Error');
-  //   }
 });
 
 // @route    POST api/image
@@ -33,38 +26,39 @@ router.get('/', auth, async (req, res) => {
 // @access   Private
 router.post('/', auth, async (req, res) => {
   try {
+    const profileStorageUrl = config.get('profilePics.storageUrl');
+
     // const user = await User.findById(req.user.id).select('avatar');
     await User.findOneAndUpdate(
       { _id: req.user.id },
       {
         $set: {
-          avatar: `https://storage.googleapis.com/developerconnect/${req.user.id}`,
+          avatar: profileStorageUrl + generateProfileFilename(req.user.id)
         },
       },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     );
-    res.status(200);
+    res.status(200).end();
   } catch (err) {
     console.error(err.message);
-    // res.status(500).send('Server Error');
   }
 });
 
-async function gcsSignedUrl(filename, minutesToExpiration) {
-  const bucketName = 'developerconnect';
+async function getAzureSignedUrl(fileName, minutesToExpiration) {
+  const profileConnectionString = config.get('profilePics.connectionString');
 
-  const storage = new Storage({ keyFilename: 'google.json' });
-  const options = {
-    version: 'v4',
-    action: 'write',
-    expires: Date.now() + minutesToExpiration * 60 * 1000,
-  };
-  var key = GOOGLE_KEY;
-  var secret = GOOGLE_SECRET;
-  const [url] = await storage
-    .bucket(bucketName)
-    .file(filename)
-    .getSignedUrl(options);
+  const containerName = 'profilepics';
+  const connectionString = profileConnectionString;
+
+  const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  const blobClient = containerClient.getBlobClient(fileName);
+  const url = await blobClient.generateSasUrl(
+    { 
+      expiresOn: new Date(new Date().valueOf() + minutesToExpiration * 1000), // Required. Date type
+      permissions: BlobSASPermissions.parse("racw") // Required
+    }
+  );
   return url;
 }
 

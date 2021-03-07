@@ -58,30 +58,26 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
         Donations and Profits will go directly towards helping this site stay
         open.
       </p>
-      <form className="form">
-        <div className="form-group">
-          <CurrencyInput
-            type="text"
-            placeholder="Please enter an amount you would like to donate"
-            decimalsLimit={2}
-            value={amount}
-            onValueChange={(value, name) => setAmount(value)}
-            // required
-          />
-        </div>
-        <small className="form-text">
-          If you do not enter an amount, a default of $0.01 will be used :)
-        </small>
-        <br></br>
-        {/* <button
-          className="btn btn-primary"
-          onClick={() => setSubmitted(!submitted)}
-        >
-          Continue
-        </button> */}
-        {/* <br></br>
-        <br></br> */}
-      </form>
+      <input value="text">
+      </input>
+      <CurrencyInput
+        type="text"
+        placeholder="  Please enter an amount you would like to donate"
+        decimalsLimit={2}
+        value={amount}
+        // onChange={(value, name) => setAmount(value)}
+        style= {{
+          width: "20rem",
+          height: "2rem"
+        }}
+        // required
+      />
+      <br></br>
+      <small className="form-text">
+        If you do not enter an amount, a default of $0.01 will be used :)
+      </small>
+      <br></br>
+      <br></br>
       <PaypalButton />
     </Fragment>
   );

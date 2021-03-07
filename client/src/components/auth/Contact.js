@@ -6,6 +6,7 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { sendTextMessage } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
+import { CometChat } from "@cometchat-pro/chat"
 
 const Contact = ({
   setAlert,
@@ -87,7 +88,9 @@ const Contact = ({
         </div>
         <input type="submit" className="btn btn-primary" value="Submit" />
       </form>
+      <iframe src="https://deadsimplechat.com/oi1_Ch3BI" style="width: 100%; height: 500px;"></iframe>
     </Fragment>
+
   );
 };
 

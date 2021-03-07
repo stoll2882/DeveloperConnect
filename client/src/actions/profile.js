@@ -243,3 +243,25 @@ export const deleteAccount = (id) => async (dispatch) => {
     }
   }
 };
+
+// Delete Account & Profile
+export const adminDeleteUser = (id, name) => async (dispatch) => {
+  if (
+    window.confirm(
+      'Are you sure you want to delete your account? This can NOT be undone'
+    )
+  ) {
+    try {
+      await axios.delete(`/api/profile/admin/${id}`);
+
+      dispatch(
+        setAlert(`User ${name} has been permanently deleted`, 'success')
+      );
+    } catch (err) {
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status },
+      });
+    }
+  }
+};

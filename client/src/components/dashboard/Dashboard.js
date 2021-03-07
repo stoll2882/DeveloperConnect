@@ -7,6 +7,7 @@ import DashboardActions from './DashboardActions';
 import Experience from './Experience';
 import Education from './Education';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
+import { CometChat } from "@cometchat-pro/chat"
 
 const Dashboard = ({
   getCurrentProfile,
@@ -25,8 +26,8 @@ const Dashboard = ({
       <img
         src={user.avatar}
         alt="user avatar"
-        className="round-img"
-        style={{ maxWidth: '130px' }}
+        // className="round-img"
+        style={{ maxWidth: '130px', border: "2px solid black" }}
       />
       <p className="lead">
         <i className="fas fa-user"></i> Welcome {user && user.name}
