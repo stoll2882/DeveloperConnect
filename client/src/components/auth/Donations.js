@@ -13,6 +13,7 @@ import 'react-chat-widget/lib/styles.css';
 
 export const Donations = ({ isAuthenticated, setAlert }) => {
   const [amount, setAmount] = useState(1);
+  const [money, setMoney] = useState(1);
   const [submitted, setSubmitted] = useState(false);
 
   const PaypalButton = () => (
@@ -32,7 +33,7 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
             {
               amount: {
                 currency_code: 'USD',
-                value: amount,
+                value: document.getElementById('amountField').value,
               },
             },
           ],
@@ -74,7 +75,14 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
         }}
         // required
       /> */}
-      {'$'}<NumericInput precision={2} step={1} value={amount} min={1} max={100} />{'USD'}
+      {'$'}<NumericInput 
+        precision={2} 
+        step={1} 
+        value={amount} 
+        min={1} 
+        max={100}
+        id='amountField' 
+      />{'USD'}
       <br></br>
       <small className="form-text">
         If you do not enter an amount, a default of $1.00 will be used :)
