@@ -7,6 +7,8 @@ import 'react-phone-number-input/style.css';
 import { sendTextMessage } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
 import { CometChat } from "@cometchat-pro/chat"
+import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
 
 const Contact = ({
   setAlert,
@@ -49,6 +51,20 @@ const Contact = ({
     setFormData({ ...formData, phoneNumber: e });
   };
 
+  const handleNewUserMessage = (newMessage) => {
+    if (newMessage == 'hello') {
+      addResponseMessage(`Hello there, ${user.name}!`)
+    } else if (newMessage == 'help') {
+      addResponseMessage(
+        'Thank you for contacting us. Here are your options: \nPress 1 to here how our site works \nPress 2 if you are having a problem with your account \nPress 3 to speak to a live representative'
+      )
+    } else if (newMessage == '1') {
+      addResponseMessage('Developer connect is a social media site that allows developers across the world to connect with one another as well as share their work and find partners for new endevours.')
+    }
+    console.log(`New message incoming! ${newMessage}`);
+    // Now send the message throught the backend API
+  };
+
   return (
     <Fragment>
       <h1 className="large text-primary">Contact the Developers</h1>
@@ -88,7 +104,14 @@ const Contact = ({
         </div>
         <input type="submit" className="btn btn-primary" value="Submit" />
       </form>
-      <iframe src="https://deadsimplechat.com/oi1_Ch3BI" style="width: 100%; height: 500px;"></iframe>
+      {/* <iframe src="https://deadsimplechat.com/oi1_Ch3BI" style="width: 100%; height: 500px;"></iframe>
+       */}
+       {/* <Widget
+          handleNewUserMessage={handleNewUserMessage}
+          // profileAvatar={logo}
+          title="Have a question?"
+          subtitle="We are here to help!"
+        /> */}
     </Fragment>
 
   );

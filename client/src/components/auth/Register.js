@@ -22,6 +22,10 @@ import PropTypes from 'prop-types';
 import GmailLogin from './GmailLogin';
 import PhoneInput from 'react-phone-number-input';
 import TwoFactorConfirmation from './TwoFactorConfirmation';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
 
 const Register = ({
   setAlert,
@@ -104,6 +108,20 @@ const Register = ({
   const expireCaptcha = () => {
     dispatchExpireCaptcha();
     setFormData({ ...formData, human: false });
+  };
+
+  const handleNewUserMessage = (newMessage) => {
+    if (newMessage == 'hello') {
+      addResponseMessage(`Hello there!`)
+    } else if (newMessage == 'help') {
+      addResponseMessage(
+        'Thank you for contacting us. Here are your options: \nPress 1 to here how our site works \nPress 2 if you are having a problem with your account \nPress 3 to speak to a live representative'
+      )
+    } else if (newMessage == '1') {
+      addResponseMessage('Developer connect is a social media site that allows developers across the world to connect with one another as well as share their work and find partners for new endevours.')
+    }
+    console.log(`New message incoming! ${newMessage}`);
+    // Now send the message throught the backend API
   };
 
   if (isAuthenticated) {
@@ -202,108 +220,116 @@ const Register = ({
             <p className="lead">
               <i className="fas fa-user"></i> Create Your Account
             </p>
-            <FacebookLoginButton onChange={facebookChosen} />
-            <br></br>
-            <br></br>
-            <GoogleLoginButton />
-            <br></br>
-            <br></br>
-            <h2>------------------OR-------------------</h2>
-            {/* <br></br> */}
-            <form className="form" onSubmit={(e) => onSubmit(e)}>
-              <small className="form-text">
-                If you do not register with facebook or google, you will be
-                prompted for two-factor-authentication
-              </small>
-              <div className="form-group">
-                <input
-                  type="text"
-                  placeholder="Name"
-                  name="name"
-                  id="namefield"
-                  value={name}
-                  onChange={(e) => onChange(e)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  name="email"
-                  id="emailfield"
-                  value={email}
-                  onChange={(e) => onChange(e)}
-                  required
-                />
-                <small className="form-text">
-                  This site uses Gravatar so if you want a profile image, use a
-                  Gravatar email
-                </small>
-              </div>
-              <PhoneInput
-                maxLength="15"
-                minLength="4"
-                id="phoneNumber"
-                //   style={{ height: '30px', maxWidth: '270px' }}
-                defaultCountry="US"
-                placeholder="Phone number"
-                value={phoneNumber}
-                onChange={(e) => onPhoneChange(e)}
-              />
-              <div className="form-group">
-                <input
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  minLength="6"
-                  value={password}
-                  onChange={(e) => onChange(e)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="password"
-                  placeholder="Confirm Password"
-                  name="password2"
-                  minLength="6"
-                  value={password2}
-                  onChange={(e) => onChange(e)}
-                  required
-                />
-              </div>
-              <ReCAPTCHA
-                ref={recaptchaRef}
-                sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
-                render="explicit"
-                onChange={verifyCaptcha}
-                onExpired={expireCaptcha}
-              />
-              <br></br>
-              <input
-                type="checkbox"
-                id="privacypolicy"
-                name="privacypolicy"
-                value="privacypolicy"
-                onChange={(e) =>
-                  setPrivacyPolicyAccepted(!privacyPolicyAccepted)
-                }
-              />{' '}
-              <label htmlFor="privacypolicy">
-                I agree to the{' '}
-                <Link to="/privacypolicy">
-                  privacy policy and terms of service
-                </Link>
-              </label>
-              <br></br>
-              <br></br>
-              <input
-                type="submit"
-                className="btn btn-primary"
-                value="Register"
-              />
-            </form>
+            <Tabs>
+            <TabList>
+              <Tab>Register With Site</Tab>
+              <Tab>Register With Facebook</Tab>
+              <Tab>Register With Google</Tab>
+            </TabList>
+              <TabPanel>
+                <form className="form" onSubmit={(e) => onSubmit(e)}>
+                  <small className="form-text">
+                    If you do not register with facebook or google, you will be
+                    prompted for two-factor-authentication
+                  </small>
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      name="name"
+                      id="namefield"
+                      value={name}
+                      onChange={(e) => onChange(e)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="email"
+                      placeholder="Email Address"
+                      name="email"
+                      id="emailfield"
+                      value={email}
+                      onChange={(e) => onChange(e)}
+                      required
+                    />
+                    <small className="form-text">
+                      This site uses Gravatar so if you want a profile image, use a
+                      Gravatar email
+                    </small>
+                  </div>
+                  <PhoneInput
+                    maxLength="15"
+                    minLength="4"
+                    id="phoneNumber"
+                    //   style={{ height: '30px', maxWidth: '270px' }}
+                    defaultCountry="US"
+                    placeholder="Phone number"
+                    value={phoneNumber}
+                    onChange={(e) => onPhoneChange(e)}
+                  />
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      name="password"
+                      minLength="6"
+                      value={password}
+                      onChange={(e) => onChange(e)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      placeholder="Confirm Password"
+                      name="password2"
+                      minLength="6"
+                      value={password2}
+                      onChange={(e) => onChange(e)}
+                      required
+                    />
+                  </div>
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+                    render="explicit"
+                    onChange={verifyCaptcha}
+                    onExpired={expireCaptcha}
+                  />
+                  <br></br>
+                  <input
+                    type="checkbox"
+                    id="privacypolicy"
+                    name="privacypolicy"
+                    value="privacypolicy"
+                    onChange={(e) =>
+                      setPrivacyPolicyAccepted(!privacyPolicyAccepted)
+                    }
+                  />{' '}
+                  <label htmlFor="privacypolicy">
+                    I agree to the{' '}
+                    <Link to="/privacypolicy">
+                      privacy policy and terms of service
+                    </Link>
+                  </label>
+                  <br></br>
+                  <br></br>
+                  <input
+                    type="submit"
+                    className="btn btn-primary"
+                    value="Register"
+                  />
+                </form>
+              </TabPanel>
+              <TabPanel>
+                <FacebookLoginButton onChange={facebookChosen} />
+              </TabPanel>
+              <TabPanel>
+                <GoogleLoginButton />
+              </TabPanel>
+            </Tabs>
+            
             <p className="my-1">
               Already have an account? <Link to="/login">Sign In</Link>
             </p>

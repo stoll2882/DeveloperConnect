@@ -14,6 +14,10 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { reCaptchaCheck } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
 import TwoFactorLoginConfirmation from './TwoFactorLoginConfirmation';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
 
 export const Login = ({
   login,
@@ -38,6 +42,20 @@ export const Login = ({
     email: '',
     password: '',
   });
+
+  const handleNewUserMessage = (newMessage) => {
+    if (newMessage == 'hello') {
+      addResponseMessage(`Hello there!`)
+    } else if (newMessage == 'help') {
+      addResponseMessage(
+        'Thank you for contacting us. Here are your options: \nPress 1 to here how our site works \nPress 2 if you are having a problem with your account \nPress 3 to speak to a live representative'
+      )
+    } else if (newMessage == '1') {
+      addResponseMessage('Developer connect is a social media site that allows developers across the world to connect with one another as well as share their work and find partners for new endevours.')
+    }
+    console.log(`New message incoming! ${newMessage}`);
+    // Now send the message throught the backend API
+  };
 
   const { email, password } = formData;
 
@@ -69,9 +87,9 @@ export const Login = ({
   };
 
   // Redirect if logged in
-  // if (isAuthenticated) {
-  //   return <Redirect to="/twofactorloginconfirmation" />;
-  // }
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <Fragment>
@@ -81,41 +99,67 @@ export const Login = ({
         <p className="lead">
           <i className="fas fa-user"></i> Sign Into Your Account
         </p>
-        <FacebookReLogin />
-        <br></br>
-        <br></br>
-        <GmailReLogin />
-        <form className="form" onSubmit={(e) => onSubmit(e)}>
-          <div className="form-group">
-            <input
-              type="email"
-              placeholder="Email Address"
-              name="email"
-              value={email}
-              onChange={(e) => onChange(e)}
-              required
+        <Tabs>
+          <TabList>
+            <Tab>Login With Site Account</Tab>
+            <Tab>Login With Facebook</Tab>
+            <Tab>Login With Google</Tab>
+          </TabList>
+          <TabPanel>
+            <form className="form" onSubmit={(e) => onSubmit(e)}>
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="email"
+                  value={email}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  minLength="6"
+                  value={password}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+              </div>
+              <ReCAPTCHA
+                sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+                render="explicit"
+                onChange={verifyCaptcha}
+                onExpired={expireCaptcha}
+              />
+              <br></br>
+              <input type="submit" className="btn btn-primary" value="Login" />
+            </form>
+          </TabPanel>
+          <TabPanel>
+            <ReCAPTCHA
+              sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+              render="explicit"
+              onChange={verifyCaptcha}
+              onExpired={expireCaptcha}
             />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              minLength="6"
-              value={password}
-              onChange={(e) => onChange(e)}
-              required
+            <br></br>
+            <FacebookReLogin />
+          </TabPanel>
+          <TabPanel>
+            <ReCAPTCHA
+              sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
+              render="explicit"
+              onChange={verifyCaptcha}
+              onExpired={expireCaptcha}
             />
-          </div>
-          <ReCAPTCHA
-            sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
-            render="explicit"
-            onChange={verifyCaptcha}
-            onExpired={expireCaptcha}
-          />
-          <br></br>
-          <input type="submit" className="btn btn-primary" value="Login" />
-        </form>
+            <br></br>
+            <GmailReLogin />
+          </TabPanel>
+        </Tabs>
+        <br></br>
         <p className="my-1">
           Don't have an account? <Link to="/register">Sign Up</Link>
         </p>
@@ -124,6 +168,12 @@ export const Login = ({
         // <Fragment />
         <TwoFactorLoginConfirmation email={email} />
       )} */}
+      {/* <Widget
+          handleNewUserMessage={handleNewUserMessage}
+          // profileAvatar={logo}
+          title="Have a question?"
+          subtitle="We are here to help!"
+        /> */}
     </Fragment>
   );
 };

@@ -50,6 +50,7 @@
     "postcss-dir-pseudo-class": "^5.0.0",
     "postcss-pseudo-class-any-link": "^6.0.0",
     "react": "^17.0.1",
+    "react-chat-widget": "^3.0.5",
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.2.2",
     "react-google-recaptcha": "^2.1.0",

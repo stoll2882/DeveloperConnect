@@ -7,9 +7,12 @@ import { setAlert } from '../../actions/alert';
 import { PayPalButton } from 'react-paypal-button-v2';
 import PayPal from './PayPal';
 import CurrencyInput from 'react-currency-input-field';
+import NumericInput from 'react-numeric-input';
+import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
 
 export const Donations = ({ isAuthenticated, setAlert }) => {
-  const [amount, setAmount] = useState(0.01);
+  const [amount, setAmount] = useState(1);
   const [submitted, setSubmitted] = useState(false);
 
   const PaypalButton = () => (
@@ -58,8 +61,7 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
         Donations and Profits will go directly towards helping this site stay
         open.
       </p>
-      <input value="text">
-      </input>
+{/* 
       <CurrencyInput
         type="text"
         placeholder="  Please enter an amount you would like to donate"
@@ -71,10 +73,11 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
           height: "2rem"
         }}
         // required
-      />
+      /> */}
+      {'$'}<NumericInput precision={2} step={1} value={amount} min={1} max={100} />{'USD'}
       <br></br>
       <small className="form-text">
-        If you do not enter an amount, a default of $0.01 will be used :)
+        If you do not enter an amount, a default of $1.00 will be used :)
       </small>
       <br></br>
       <br></br>
