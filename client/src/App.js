@@ -7,6 +7,7 @@ import PrivacyPolicy from './components/auth/PrivacyNotice';
 import FinishRegister from './components/auth/FinishRegister';
 import TwoFactorConfirmation from './components/auth/TwoFactorConfirmation';
 import TwoFactorLoginConfirmation from './components/auth/TwoFactorLoginConfirmation';
+import PasswordReset from './components/auth/PasswordReset';
 import Login from './components/auth/Login';
 import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
@@ -56,6 +57,11 @@ const App = () => {
                 exact
                 path="/twofactorconfirmation"
                 component={TwoFactorConfirmation}
+              />
+              <Route
+                exact
+                path="/passwordreset"
+                component={PasswordReset}
               />
               <Route
                 exact

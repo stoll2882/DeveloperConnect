@@ -220,9 +220,12 @@ const Register = ({
             <p className="lead">
               <i className="fas fa-user"></i> Create Your Account
             </p>
+            <p className="my-1">
+              Already have an account? <Link to="/login">Sign In</Link>
+            </p>
             <Tabs>
             <TabList>
-              <Tab>Register With Site</Tab>
+              <Tab>Register With Email</Tab>
               <Tab>Register With Facebook</Tab>
               <Tab>Register With Google</Tab>
             </TabList>
@@ -240,6 +243,7 @@ const Register = ({
                       id="namefield"
                       value={name}
                       onChange={(e) => onChange(e)}
+                      maxLength={50}
                       required
                     />
                   </div>
@@ -251,6 +255,7 @@ const Register = ({
                       id="emailfield"
                       value={email}
                       onChange={(e) => onChange(e)}
+                      maxLength={50}
                       required
                     />
                     <small className="form-text">
@@ -274,6 +279,7 @@ const Register = ({
                       placeholder="Password"
                       name="password"
                       minLength="6"
+                      maxLength={50}
                       value={password}
                       onChange={(e) => onChange(e)}
                       required
@@ -285,6 +291,7 @@ const Register = ({
                       placeholder="Confirm Password"
                       name="password2"
                       minLength="6"
+                      maxLength={50}
                       value={password2}
                       onChange={(e) => onChange(e)}
                       required
@@ -329,10 +336,6 @@ const Register = ({
                 <GoogleLoginButton />
               </TabPanel>
             </Tabs>
-            
-            <p className="my-1">
-              Already have an account? <Link to="/login">Sign In</Link>
-            </p>
           </Fragment>
         ) : (
           <TwoFactorConfirmation

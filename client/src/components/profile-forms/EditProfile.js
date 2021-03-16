@@ -32,7 +32,7 @@ const EditProfile = ({
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
   const countryOptions = useMemo(() => countryList().getData(), []);
-  const [country, setCountry] = useState('United States');
+  // const [country, setCountry] = useState('United States');
 
   const CountrySelector = () => {
     const countryOptions = useMemo(() => countryList().getData(), []);
@@ -40,11 +40,17 @@ const EditProfile = ({
       <Select
         options={countryOptions}
         value={country}
-        onChange={(val) => setCountry(val)}
+        onChange={countryChange}
         placeholder="Select Country..."
+        name='country'
       />
     );
   };
+
+  const countryChange = value => {
+    setCountry(value.label);
+    buildNewLocationString();
+  }
 
   useEffect(() => {
     getCurrentProfile();
@@ -94,8 +100,42 @@ const EditProfile = ({
     instagram,
   } = formData;
 
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipcode, setZipcode] = useState('');
+  const [country, setCountry] = useState('');
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  // const onLocationChange = (e) => {
+  //   setLocationData({...locationData, [e.target.name]: e.target.value })
+  //   var newLocation = buildNewLocationString();
+  //   setFormData({ ...formData, location: newLocation });
+  //   console.log(location);
+  // }
+
+  const buildNewLocationString = () => {
+    var newLocation = '';
+    if (street) {
+      newLocation += `${street}, `;
+    }
+    if (city && state) {
+      newLocation += `${city} ${state}, `;
+    } else if (city) {
+      newLocation += `${city}, `;
+    } else if (state) {
+      newLocation += `${state}, `;
+    }
+    if (country) {
+      newLocation += `${country}, `;
+    }
+    if (zipcode) {
+      newLocation += `${zipcode}`
+    }
+    setFormData({ ...formData, location: newLocation });
+  }
 
   const [validSocialLinks, setValidSocialLinks] = useState({
     youtubeValid: false,
@@ -128,7 +168,7 @@ const EditProfile = ({
 
   return (
     <Fragment>
-      <h1 className="large text-primary">Create Your Profile</h1>
+      <h1 className="large text-primary">Edit Your Profile</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Let's get some information to make your
         profile stand out
@@ -158,6 +198,7 @@ const EditProfile = ({
             name="company"
             value={company}
             onChange={(e) => onChange(e)}
+            maxLength={50}
           />
           <small className="form-text">
             Could be your own company or one you work for
@@ -170,6 +211,7 @@ const EditProfile = ({
             name="website"
             value={website}
             onChange={(e) => onChange(e)}
+            maxLength={50}
           />
           <small className="form-text">
             Could be your own or a company website
@@ -179,9 +221,13 @@ const EditProfile = ({
           <input
             type="text"
             placeholder="Location"
-            name="location"
-            value={location}
-            onChange={(e) => onChange(e)}
+            name="street"
+            // value={location}
+            maxLength={50}
+            onChange={(e) => {
+              setStreet(e.target.value);
+              buildNewLocationString();
+            }}
           />
           <small className="form-text">Street Address</small>
         </div>
@@ -192,7 +238,11 @@ const EditProfile = ({
             name="city"
             style={{ maxWidth: '49%', float: 'left' }}
             // value={street}
-            // onChange={(e) => onChange(e)}
+            maxLength={50}
+            onChange={(e) => {
+              setCity(e.target.value);
+              buildNewLocationString();
+            }}
           />
           <select
             type="text"
@@ -200,7 +250,10 @@ const EditProfile = ({
             name="state"
             style={{ maxWidth: '49%', float: 'right' }}
             // value={street}
-            // onChange={(e) => onChange(e)}
+            onChange={(e) => {
+              setState(e.target.value);
+              buildNewLocationString();
+            }}
           >
             <option value="0">Select State</option>
             <option value="Alabama">Alabama</option>
@@ -263,7 +316,11 @@ const EditProfile = ({
             name="zipcode"
             // style={{ maxWidth: '49%', float: 'right' }}
             // value={street}
-            // onChange={(e) => onChange(e)}
+            maxLength={50}
+            onChange={(e) => {
+              setZipcode(e.target.value);
+              buildNewLocationString();
+            }}
           />
           <small className="form-text">Zipcode</small>
         </div>
@@ -278,6 +335,7 @@ const EditProfile = ({
             name="skills"
             value={skills}
             onChange={(e) => onChange(e)}
+            maxLength={50}
           />
           <small className="form-text">
             Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
@@ -290,6 +348,7 @@ const EditProfile = ({
             name="githubusername"
             value={githubusername}
             onChange={(e) => onChange(e)}
+            maxLength={50}
           />
           <small className="form-text">
             If you want your latest repos and a Github link, include your
@@ -325,6 +384,7 @@ const EditProfile = ({
                 name="twitter"
                 value={twitter}
                 onChange={(e) => onChange(e)}
+                maxLength={50}
               />
             </div>
 
@@ -336,6 +396,7 @@ const EditProfile = ({
                 name="facebook"
                 value={facebook}
                 onChange={(e) => onChange(e)}
+                maxLength={50}
               />
             </div>
 
@@ -347,6 +408,7 @@ const EditProfile = ({
                 name="youtube"
                 value={youtube}
                 onChange={(e) => onChange(e)}
+                maxLength={50}
               />
             </div>
 
@@ -358,6 +420,7 @@ const EditProfile = ({
                 name="linkedin"
                 value={linkedin}
                 onChange={(e) => onChange(e)}
+                maxLength={50}
               />
             </div>
 
@@ -369,6 +432,7 @@ const EditProfile = ({
                 name="instagram"
                 value={instagram}
                 onChange={(e) => onChange(e)}
+                maxLength={50}
               />
             </div>
           </Fragment>

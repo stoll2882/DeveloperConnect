@@ -38,6 +38,7 @@ export const Login = ({
   // } else if (twoFactorAttempted) {
   //   window.location.reload();
   // }
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -56,6 +57,11 @@ export const Login = ({
     console.log(`New message incoming! ${newMessage}`);
     // Now send the message throught the backend API
   };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   const { email, password } = formData;
 
@@ -86,11 +92,6 @@ export const Login = ({
     setFormData({ ...formData, human: false });
   };
 
-  // Redirect if logged in
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
-
   return (
     <Fragment>
       {/* {!isAuthenticated || facebookAttempted || googleAttempted ? ( */}
@@ -99,9 +100,12 @@ export const Login = ({
         <p className="lead">
           <i className="fas fa-user"></i> Sign Into Your Account
         </p>
+        <p className="my-1">
+          Don't have an account? <Link to="/register">Sign Up</Link>
+        </p>
         <Tabs>
           <TabList>
-            <Tab>Login With Site Account</Tab>
+            <Tab>Login With Email</Tab>
             <Tab>Login With Facebook</Tab>
             <Tab>Login With Google</Tab>
           </TabList>
@@ -136,33 +140,34 @@ export const Login = ({
               />
               <br></br>
               <input type="submit" className="btn btn-primary" value="Login" />
+              <p className="my-1">
+                Forgot your password? Reset it <Link to="/passwordreset">Here</Link>
+              </p>
             </form>
           </TabPanel>
           <TabPanel>
+            <FacebookReLogin />
+            <br></br>
+            <br></br>
             <ReCAPTCHA
               sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
               render="explicit"
               onChange={verifyCaptcha}
               onExpired={expireCaptcha}
             />
-            <br></br>
-            <FacebookReLogin />
           </TabPanel>
           <TabPanel>
+            <GmailReLogin />
+            <br></br>
+            <br></br>
             <ReCAPTCHA
               sitekey="6Le2z0oaAAAAABG-NkcbHXAHv03pkxHdwRzak2IA"
               render="explicit"
               onChange={verifyCaptcha}
               onExpired={expireCaptcha}
             />
-            <br></br>
-            <GmailReLogin />
           </TabPanel>
         </Tabs>
-        <br></br>
-        <p className="my-1">
-          Don't have an account? <Link to="/register">Sign Up</Link>
-        </p>
       </Fragment>
       {/* ) : (
         // <Fragment />
