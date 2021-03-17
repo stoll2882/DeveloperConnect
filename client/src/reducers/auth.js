@@ -15,6 +15,7 @@ import {
   TWO_FACTOR_SUCCESS,
   TWO_FACTOR_FAILED,
   GOOGLE_REGISTER_ATTEMPTED,
+  TWO_FACTOR_RESET_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -25,6 +26,7 @@ const initialState = {
   googleAttempted: false,
   twoFactorAttempted: false,
   twoFactorApproved: false,
+  twoFactorResetApproved: false,
   loading: true,
   user: null,
 };
@@ -108,6 +110,11 @@ export default function (state = initialState, action) {
         ...state,
         twoFactorApproved: false,
       };
+    case TWO_FACTOR_RESET_SUCCESS:
+      return {
+        ...state,
+        twoFactorApproved: true,
+      }
     default:
       return state;
   }

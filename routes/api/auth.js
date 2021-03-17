@@ -8,6 +8,59 @@ const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
 
+// @route    POST api/auth/phone
+// @desc     Get users phone number from email
+// @access   Public
+router.post('/phone', async (req, res) => {
+  const { email: email } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: 'No user found' }] });
+    }
+    if (user._doc.type != 'facebook' && user._doc.type != 'google') {
+      res.json(user._doc.phoneNumber);
+    } else {
+      res.status(400).send();
+    }
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route    POST api/auth/newpassword
+// @desc     Get users phone number from email
+// @access   Public
+router.post('/newpassword', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    // Encrypt password
+    const salt = await bcrypt.genSalt(10);
+    hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await User.findOneAndUpdate(
+      { email: email },
+      {
+        $set: {
+          password: hashedPassword
+        },
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    res.send('success');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 // @route    GET api/auth
 // @desc     Get user by token
 // @access   Private

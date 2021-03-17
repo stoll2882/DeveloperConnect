@@ -31,8 +31,9 @@ export const Login = ({
   reCaptchaCheck,
   setAlert,
   auth: { user },
+  twoFactorApproved,
 }) => {
-  if (facebookAttempted) {
+  if (facebookAttempted || twoFactorApproved) {
     window.location.reload();
   }
   // } else if (twoFactorAttempted) {
@@ -194,6 +195,7 @@ Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
   twoFactorAttempted: PropTypes.bool,
   googleAttemped: PropTypes.bool,
+  twoFactorApproved: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
@@ -201,6 +203,7 @@ const mapStateToProps = (state) => ({
   facebookAttempted: state.auth.facebookAttempted,
   recaptchaApproved: state.auth.recaptchaApproved,
   twoFactorAttempted: state.auth.twoFactorAttempted,
+  twoFactorApproved: state.auth.twoFactorApproved,
   googleAttempted: state.auth.googleAttempted,
   auth: state.auth,
 });

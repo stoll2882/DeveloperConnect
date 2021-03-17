@@ -20,6 +20,7 @@ import {
   WELCOME_EMAIL_SENT,
   GOOGLE_REGISTER_ATTEMPTED,
   WELCOME_EMAIL_FAILED,
+  TWO_FACTOR_RESET_SUCCESS
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { Fragment } from 'react';
@@ -225,6 +226,26 @@ export const twoFactorAuthCheck = (email, code) => async (dispatch) => {
   }
 };
 
+export const twoFactorAuthCheckPasswordReset = (email, code) => async (dispatch) => {
+  const body = { email, code };
+
+  try {
+    await axios.post('/api/twofa/verify', body);
+    dispatch({
+      type: TWO_FACTOR_RESET_SUCCESS,
+    });
+    return true;
+
+    // dispatch(setAlert('Text message sent'));
+  } catch (err) {
+    dispatch({
+      type: TWO_FACTOR_FAILED,
+    });
+    return false;
+    // const errors = err.response.data.errors;
+  }
+};
+
 export const dispatchTwoFactorAuth = (code) => async (dispatch) => {
   // const body = { code: code };
   dispatch({
@@ -283,5 +304,45 @@ export const uploadProfilePicture = (file, id) => async (dispatch) => {
     await axios.post('/api/image');
   } catch (error) {
     console.log(error);
+  }
+};
+
+// Login User
+export const findPhoneNumber = (email) => async (dispatch) => {
+  var body = { email: email };
+
+  try {
+    const res = await axios.post('/api/auth/phone', body);
+    // const res = await axios.post('/api/auth', body);
+    dispatch(twoFactorAuth(email, res.data));
+
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+};
+
+// Login User
+export const changePassword = (email, newPassword) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  var body = { email, newPassword };
+
+  try {
+    await axios.post('/api/auth/newpassword', body);
+    // const res = await axios.post('/api/auth', body);
+    dispatch(setAlert('Your password has been changed'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
   }
 };
