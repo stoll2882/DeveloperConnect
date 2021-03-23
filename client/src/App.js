@@ -32,6 +32,7 @@ import store from './store';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
+// import './Bootstrap.css';
 import './App.css';
 
 if (localStorage.token) {

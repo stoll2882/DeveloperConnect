@@ -1,10 +1,10 @@
 /* Global Styles */
 :root {
-  --primary-color: #17a2b8 !important;
-  --dark-color: #343a40 !important;
-  --light-color: #f4f4f4 !important;
-  --danger-color: #dc3545 !important;
-  --success-color: #28a745 !important;
+  --primary-color: #17a2b8;
+  --dark-color: #343a40;
+  --light-color: #f4f4f4;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
 }
 
 * {
@@ -14,7 +14,7 @@
 }
 
 body {
-  font-family: 'Raleway', sans-serif !important;
+  font-family: 'Raleway', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
@@ -40,7 +40,7 @@ img {
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
-  margin-top: 8rem;
+  margin-top: 6rem;
   margin-bottom: 3rem;
 }
 
@@ -517,10 +517,6 @@ select.PhoneInputCountrySelect {
 /* .dropdown-placeholder {
   background-image: url('google-logo.png');
 } */
-
-DropDown {
-  background-color: #0077b5;
-}
 
 /* Mobile Styles */
 @media (max-width: 700px) {

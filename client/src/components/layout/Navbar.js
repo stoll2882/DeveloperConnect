@@ -1,12 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
+import Dropdown from './Dropdown/Dropdown'; 
 
 export const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen(!dropdownOpen);
+
   const authLinks = (
     <ul>
       <li style={{ marginTop: '20px' }}>
@@ -16,38 +18,19 @@ export const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => 
         <Link to="/posts">Posts</Link>
       </li>
       <li style={{ marginTop: '20px' }}>
-        <Link to="/contact">Contact Us</Link>
-      </li>
-      <li style={{ marginTop: '20px' }}>
         <Link to="/donations">Donate</Link>
       </li>
-      { user && user._id == "601107dc69e4e177ba3d4234" &&
-        <li style={{ marginTop: '20px' }}>
-          <Link to="/admin">Admin</Link>
-        </li>
-      }
-      <li style={{ marginTop: '20px' }}>
+      {/* <li style={{ marginTop: '20px' }}>
         <Link to="/dashboard">
           <i className="fas fa-user"></i>{' '}
           <span className="hide-sm">Dashboard</span>
         </Link>
-      </li>
-      <li style={{ marginTop: '20px' }}>
-        <a onClick={logout} href="#!">
-          <i className="fas fa-sign-out-alt"></i>{' '}
-          <span className="hide-sm">Logout</span>
-        </a>
-      </li>
+      </li> */}
       { user && user.avatar &&
         <li style={{ marginLeft: '10px' }}>
-          <img src={user.avatar} style={{ maxWidth: '50px', borderRadius: '200px' }}></img>
+          <Dropdown avatar={user.avatar} id={user._id}></Dropdown>
         </li>
       }
-      {/* <li>
-        <Dropdown options={["Export to CSV", "Manage Users", "Edit Profile"]} placeholder=''>
-        </Dropdown>
-        
-      </li> */}
     </ul>
   );
 
