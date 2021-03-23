@@ -346,3 +346,31 @@ export const changePassword = (email, newPassword) => async (dispatch) => {
     }
   }
 };
+
+// Get user info into csv string
+export const getUsersCSVString = () => async (dispatch) => {
+  try {
+    var csvString = await axios.get('/api/csv');
+    return csvString.data;
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+};
+
+// Get profile info into csv string
+export const getProfileCSVString = () => async (dispatch) => {
+  try {
+    var csvString = await axios.get('/api/csv/profiles');
+    return csvString.data;
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+};

@@ -514,6 +514,10 @@ select.PhoneInputCountrySelect {
   font-size: 1.4rem;
 }
 
+/* .dropdown-placeholder {
+  background-image: url('google-logo.png');
+} */
+
 /* Mobile Styles */
 @media (max-width: 700px) {
   .container {

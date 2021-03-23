@@ -106,9 +106,26 @@ export const Login = ({
         </p>
         <Tabs>
           <TabList>
-            <Tab>Login With Email</Tab>
-            <Tab>Login With Facebook</Tab>
-            <Tab>Login With Google</Tab>
+            <Tab style={{
+               border: '0.1rem solid grey',
+               borderBottom: '0',
+               borderTopLeftRadius: '5px', 
+               borderTopRightRadius: '5px',
+             }}><img src="email-logo.png" style={{ maxWidth: '124px', marginBottom: '-10px' }}></img></Tab>
+            <Tab style={{
+               border: '0.1rem solid grey',
+               borderBottom: '0',
+               borderTopLeftRadius: '5px', 
+               borderTopRightRadius: '5px',
+               marginLeft: '5px',
+            }}><img src="facebook-logo.png" style={{ maxWidth: '151px' }}></img></Tab>
+            <Tab style={{
+               border: '0.1rem solid grey',
+               borderBottom: '0',
+               borderTopLeftRadius: '5px', 
+               borderTopRightRadius: '5px',
+               marginLeft: '5px',
+            }}><img src="google-logo.png" style={{ maxWidth: '128px', marginBottom: '-10px' }}></img></Tab>
           </TabList>
           <TabPanel>
             <form className="form" onSubmit={(e) => onSubmit(e)}>

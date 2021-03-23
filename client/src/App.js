@@ -24,6 +24,7 @@ import Contact from './components/auth/Contact';
 import Donations from './components/auth/Donations';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Admin from './components/auth/Admin';
+import AdminProfile from './components/profile/AdminProfile';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -72,6 +73,7 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:id" component={Profile} />
+              <Route exact path="/adminprofile/:id" component={AdminProfile} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute
                 exact

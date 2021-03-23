@@ -3,39 +3,51 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 
 export const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const authLinks = (
     <ul>
-      <li>
+      <li style={{ marginTop: '20px' }}>
         <Link to="/profiles">Developers</Link>
       </li>
-      <li>
+      <li style={{ marginTop: '20px' }}>
         <Link to="/posts">Posts</Link>
       </li>
-      <li>
+      <li style={{ marginTop: '20px' }}>
         <Link to="/contact">Contact Us</Link>
       </li>
-      <li>
+      <li style={{ marginTop: '20px' }}>
         <Link to="/donations">Donate</Link>
       </li>
       { user && user._id == "601107dc69e4e177ba3d4234" &&
-        <li>
+        <li style={{ marginTop: '20px' }}>
           <Link to="/admin">Admin</Link>
         </li>
       }
-      <li>
+      <li style={{ marginTop: '20px' }}>
         <Link to="/dashboard">
           <i className="fas fa-user"></i>{' '}
           <span className="hide-sm">Dashboard</span>
         </Link>
       </li>
-      <li>
+      <li style={{ marginTop: '20px' }}>
         <a onClick={logout} href="#!">
           <i className="fas fa-sign-out-alt"></i>{' '}
           <span className="hide-sm">Logout</span>
         </a>
       </li>
+      { user && user.avatar &&
+        <li style={{ marginLeft: '10px' }}>
+          <img src={user.avatar} style={{ maxWidth: '50px', borderRadius: '200px' }}></img>
+        </li>
+      }
+      {/* <li>
+        <Dropdown options={["Export to CSV", "Manage Users", "Edit Profile"]} placeholder=''>
+        </Dropdown>
+        
+      </li> */}
     </ul>
   );
 
@@ -54,7 +66,7 @@ export const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => 
   );
 
   return (
-    <nav className="navbar bg-dark">
+    <nav className="navbar bg-dark" >
       <h1>
         <Link to="/">
           <i className="fas fa-code"></i> DevConnector

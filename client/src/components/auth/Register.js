@@ -225,9 +225,26 @@ const Register = ({
             </p>
             <Tabs>
             <TabList>
-              <Tab>Register With Email</Tab>
-              <Tab>Register With Facebook</Tab>
-              <Tab>Register With Google</Tab>
+              <Tab style={{
+                border: '0.1rem solid grey',
+                borderBottom: '0',
+                borderTopLeftRadius: '5px', 
+                borderTopRightRadius: '5px',
+              }}><img src="email-logo.png" style={{ maxWidth: '124px', marginBottom: '-10px' }}></img></Tab>
+              <Tab style={{
+                border: '0.1rem solid grey',
+                borderBottom: '0',
+                borderTopLeftRadius: '5px', 
+                borderTopRightRadius: '5px',
+                marginLeft: '5px',
+              }}><img src="facebook-logo.png" style={{ maxWidth: '150px' }}></img></Tab> 
+              <Tab style={{
+                border: '0.1rem solid grey',
+                borderBottom: '0',
+                borderTopLeftRadius: '5px', 
+                borderTopRightRadius: '5px',
+                marginLeft: '5px',
+              }}><img src="google-logo.png" style={{ maxWidth: '128px', marginBottom: '-10px' }}></img></Tab>
             </TabList>
               <TabPanel>
                 <form className="form" onSubmit={(e) => onSubmit(e)}>
