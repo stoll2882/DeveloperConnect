@@ -10,6 +10,37 @@ import CurrencyInput from 'react-currency-input-field';
 import NumericInput from 'react-numeric-input';
 import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
+import {loadStripe} from '@stripe/stripe-js';
+import {
+  CardElement,
+  Elements,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js';
+
+const CheckoutForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const {error, paymentMethod} = await stripe.createPaymentMethod({
+      type: 'card',
+      card: elements.getElement(CardElement),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <CardElement />
+      <button type="submit" disabled={!stripe}>
+        Pay
+      </button>
+    </form>
+  );
+};
+
+const stripePromise = loadStripe('TEST');
 
 export const Donations = ({ isAuthenticated, setAlert }) => {
   const [amount, setAmount] = useState(1);
@@ -62,6 +93,11 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
         Donations and Profits will go directly towards helping this site stay
         open.
       </p>
+      <Elements stripe={stripePromise}>
+        <CheckoutForm />
+      </Elements>
+      <br></br>
+      <br></br>
 {/* 
       <CurrencyInput
         type="text"

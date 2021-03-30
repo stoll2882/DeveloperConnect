@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "@cometchat-pro/chat": "^2.2.1",
+    "@stripe/react-stripe-js": "^1.4.0",
+    "@stripe/stripe-js": "^1.13.2",
     "@szhsin/react-menu": "^1.8.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
@@ -20,6 +22,7 @@
     "react-bootstrap": "^1.5.2",
     "react-chat-widget": "^3.0.5",
     "react-csv": "^2.0.3",
+    "react-csv-reader": "^3.3.0",
     "react-currency-input-field": "^3.3.0",
     "react-dom": "^17.0.1",
     "react-dropdown": "^1.9.2",

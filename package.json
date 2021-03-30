@@ -32,12 +32,15 @@
     "@babel/plugin-syntax-class-properties": "^7.12.1",
     "@babel/plugin-transform-classes": "^7.12.1",
     "@google-cloud/storage": "^5.8.0",
+    "@stripe/react-stripe-js": "^1.4.0",
+    "@stripe/stripe-js": "^1.13.2",
     "babel": "^6.23.0",
     "bcryptjs": "^2.4.3",
     "class-utils": "^0.3.6",
     "config": "^3.3.3",
     "create-react-app": "^4.0.1",
     "csv-writer": "^1.6.0",
+    "csvtojson": "^2.0.10",
     "es6-promise": "^4.2.8",
     "express": "^4.17.1",
     "express-validator": "^6.8.1",
@@ -60,6 +63,7 @@
     "react-select": "^4.1.0",
     "react-select-country-list": "^2.2.3",
     "request": "^2.88.2",
+    "stripe": "^8.140.0",
     "twilio": "^3.56.0"
   },
   "devDependencies": {

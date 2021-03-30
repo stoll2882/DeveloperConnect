@@ -374,3 +374,32 @@ export const getProfileCSVString = () => async (dispatch) => {
     }
   }
 };
+
+// Get combined info into csv string
+export const getCombinedCSVString = () => async (dispatch) => {
+  try {
+    var csvString = await axios.get('/api/csv/combined');
+    return csvString.data;
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+};
+
+// Send combined info into csv string
+export const uploadCsv = (csvData) => async (dispatch) => {
+  var body = csvData;
+  try {
+    var csvString = await axios.post('/api/csv/upload', body);
+    return csvString.data;
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+};
