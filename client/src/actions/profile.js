@@ -248,7 +248,7 @@ export const deleteAccount = (id) => async (dispatch) => {
 export const adminDeleteUser = (id, name) => async (dispatch) => {
   if (
     window.confirm(
-      'Are you sure you want to delete your account? This can NOT be undone'
+      `Are you sure you want to delete ${name}'s account? This can NOT be undone.`
     )
   ) {
     try {

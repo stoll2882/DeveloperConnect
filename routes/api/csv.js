@@ -11,9 +11,12 @@ const db = config.get('database.mongoURI');
 const createCsvStringifier = require("csv-writer").createObjectCsvStringifier;
 const auth = require('../../middleware/auth');
 // const axios = require('axios');
+const normalize = require('normalize-url');
+const gravatar = require('gravatar');
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const bcrypt = require('bcryptjs');
 
 // @route   GET api/csv
 // @desc    Get current DB data into csv file
@@ -226,14 +229,14 @@ const handleCreateProfile = async (userID, profileInfo) => {
   try {
     // Using upsert option (creates new doc if no match is found):
     let profile = await Profile.findOneAndUpdate(
-      { user: req.user.id },
+      { user: userID },
       { $set: profileFields },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     );
-    return res.json(profile);
+    console.log(profile);
   } catch (err) {
     console.error(err.message);
-    return res.status(500).send('Server Error');
+    // return res.status(500).send('Server Error');
   }
 }
 
@@ -342,8 +345,15 @@ router.post('/upload', auth, async (req, res) => {
   headers = csvData[0];
   csvData.shift();
 
+  for (var i = 0; i < csvData.length; i++) {
+    if (csvData[i].length < 5) {
+      csvData.splice(i, 1);
+    }
+  }
+
   try {
-    for (const user in csvData) {
+    for (var i = 0; i < csvData.length; i++) {
+      const user = csvData[i];
       var userData = {
         name: user[0],
         email: user[1],
@@ -356,6 +366,9 @@ router.post('/upload', auth, async (req, res) => {
       var profileData = {
         user: userId,
         bio: user[3],
+        status: user[40],
+        location: user[41],
+        company: user[42],
         skills: user[4],
         education: [],
         experience: [],
@@ -371,7 +384,7 @@ router.post('/upload', auth, async (req, res) => {
         fieldofstudy: user[7],
         from: user[8],
         to: user[9],
-        current: user[10].toLowerCase(),
+        current: user[10],
         description: user[11],
       }
       profileData.education.push(education1);

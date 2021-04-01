@@ -393,8 +393,14 @@ export const getCombinedCSVString = () => async (dispatch) => {
 export const uploadCsv = (csvData) => async (dispatch) => {
   var body = csvData;
   try {
-    var csvString = await axios.post('/api/csv/upload', body);
-    return csvString.data;
+    if (
+      window.confirm (
+        'Are you sure you want to add these users to the database? It will permenantly alter user data.'
+      )
+    ) {
+      var csvString = await axios.post('/api/csv/upload', body);
+      return csvString.data;
+    }
   } catch (err) {
     const errors = err.response.data.errors;
 

@@ -33,8 +33,9 @@ const Profiles = ({ getProfiles, profile: { profiles, loading }, deleteAccount, 
   //   setProfileCsvData(getProfileCSVString());
   // }
 
-  const successUpload = (data) => {
-    uploadCsv(data);
+  const successUpload = (dataRead) => {
+    console.log(dataRead);
+    uploadCsv(dataRead);
   }
 
   return (
@@ -57,7 +58,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading }, deleteAccount, 
           }
           <br></br>
           <h1 className="large text-primary">Upload CSV To Database</h1>
-          <CSVReader onFileLoaded={(data, fileInfo) => successUpload(data)} />
+          <CSVReader onFileLoaded={(dataRead, fileInfo) => successUpload(dataRead)} />
           <br></br>
           <h1 className="large text-primary">Manage Developers</h1>
           <div className="profiles">
