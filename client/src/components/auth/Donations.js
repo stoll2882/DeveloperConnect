@@ -109,7 +109,7 @@ export const Donations = ({ isAuthenticated, setAlert, stripePayment }) => {
     if (error) {
       console.log(error);
     } else {
-      var secret = await stripePayment(paymentMethod);
+      var secret = await stripePayment(amount);
       var result = await stripe.confirmCardPayment(secret, {
         payment_method: paymentMethod.id
       });

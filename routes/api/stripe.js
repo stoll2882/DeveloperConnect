@@ -11,8 +11,9 @@ const stripe = require("stripe")(liveKey);
 // @desc    Make stripe payment
 // @access  Private
 router.post('/', async (req, res) => {
+    const { amount } = req.body;
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: 100,
+        amount: (amount * 100),
         currency: "usd"
     });
     res.send({

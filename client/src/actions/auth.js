@@ -411,8 +411,8 @@ export const uploadCsv = (csvData) => async (dispatch) => {
 };
 
 // make stripe payment request
-export const stripePayment = (paymentMethod) => async (dispatch) => {
-  const body = { paymentMethod };
+export const stripePayment = (amount) => async (dispatch) => {
+  const body = { amount };
   try {
     var result = await axios.post('/api/stripe', body);
     dispatch(setAlert('Payment recieved'));
