@@ -415,9 +415,9 @@ export const stripePayment = (paymentMethod) => async (dispatch) => {
   const body = { paymentMethod };
   try {
     var result = await axios.post('/api/stripe', body);
+    dispatch(setAlert('Payment recieved'));
     var secret = result.data.clientSecret;
     return secret;
-    // dispatch(setAlert('Payment recieved'));
   } catch (err) {
     console.log(err);
   }
