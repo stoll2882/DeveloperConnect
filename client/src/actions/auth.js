@@ -409,3 +409,16 @@ export const uploadCsv = (csvData) => async (dispatch) => {
     }
   }
 };
+
+// make stripe payment request
+export const stripePayment = (paymentMethod) => async (dispatch) => {
+  const body = { paymentMethod };
+  try {
+    var result = await axios.post('/api/stripe', body);
+    var secret = result.data.clientSecret;
+    return secret;
+    // dispatch(setAlert('Payment recieved'));
+  } catch (err) {
+    console.log(err);
+  }
+};

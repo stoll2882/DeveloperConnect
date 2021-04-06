@@ -4,48 +4,57 @@ import { connect } from 'react-redux';
 import GoogleLogin from 'react-google-login';
 import PropTypes from 'prop-types';
 import { setAlert } from '../../actions/alert';
+import { stripePayment } from '../../actions/auth';
 import { PayPalButton } from 'react-paypal-button-v2';
 import PayPal from './PayPal';
 import CurrencyInput from 'react-currency-input-field';
 import NumericInput from 'react-numeric-input';
 import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
-import {loadStripe} from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import {
   CardElement,
   Elements,
   useStripe,
   useElements,
+  ElementsConsumer
 } from '@stripe/react-stripe-js';
 
-const CheckoutForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
-      type: 'card',
-      card: elements.getElement(CardElement),
-    });
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <CardElement />
-      <button type="submit" disabled={!stripe}>
-        Pay
-      </button>
-    </form>
-  );
+const CARD_ELEMENT_OPTIONS = {
+  iconStyle: "solid",
+  hidePostalCode: true,
+  style: {
+    base: {
+      iconColor: "rgb(240, 57, 122)",
+      color: "rgb(240, 57, 122)",
+      fontSize: "16px",
+      fontFamily: '"Open Sans", sans-serif',
+      fontSmoothing: "antialiased",
+      "::placeholder": {
+        color: "#CFD7DF"
+      }
+    },
+    invalid: {
+      color: "#e5424d",
+      ":focus": {
+        color: "#303238"
+      }
+    }
+  }
 };
 
-const stripePromise = loadStripe('TEST');
+function CardSection() {
+  return <CardElement options={CARD_ELEMENT_OPTIONS} />
+}
 
-export const Donations = ({ isAuthenticated, setAlert }) => {
+export const Donations = ({ isAuthenticated, setAlert, stripePayment }) => {
   const [amount, setAmount] = useState(1);
   const [money, setMoney] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+
+  const stripe = useStripe();
+  const elements = useElements();
 
   const PaypalButton = () => (
     // console.log('Test');
@@ -86,6 +95,28 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
     />
   );
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!stripe || !elements) {
+      console.log('fail');
+      return;
+    }
+    const {error, paymentMethod} = await stripe.createPaymentMethod({
+      type: 'card',
+      card: elements.getElement(CardElement),
+    });
+    
+    if (error) {
+      console.log(error);
+    } else {
+      var secret = await stripePayment(paymentMethod);
+      var result = await stripe.confirmCardPayment(secret, {
+        payment_method: paymentMethod.id
+      });
+      console.log(result);
+    }
+  }
+
   return (
     <Fragment>
       <h1 className="large text-primary">Donate to a Charity of Your Choice</h1>
@@ -93,24 +124,6 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
         Donations and Profits will go directly towards helping this site stay
         open.
       </p>
-      <Elements stripe={stripePromise}>
-        <CheckoutForm />
-      </Elements>
-      <br></br>
-      <br></br>
-{/* 
-      <CurrencyInput
-        type="text"
-        placeholder="  Please enter an amount you would like to donate"
-        decimalsLimit={2}
-        value={amount}
-        // onChange={(value, name) => setAmount(value)}
-        style= {{
-          width: "20rem",
-          height: "2rem"
-        }}
-        // required
-      /> */}
       {'$'}<NumericInput 
         precision={2} 
         step={1} 
@@ -125,6 +138,20 @@ export const Donations = ({ isAuthenticated, setAlert }) => {
       </small>
       <br></br>
       <br></br>
+      <h2>Donate With Stripe</h2>
+      {/* <form onSubmit> */}
+      <form onSubmit={handleSubmit}>
+        <CardElement />
+        <br></br>
+        <button type="submit" disabled={!stripe} className="btn">
+          Donate With Stripe
+        </button>
+      </form>
+      <br></br>
+        {/* <button type="submit" className="btn">Donate With Stripe</button>
+      </form> */}
+      <br></br>
+      <h2>Donate With PayPal</h2>
       <PaypalButton />
     </Fragment>
   );
@@ -134,6 +161,7 @@ Donations.propTypes = {
   isAuthenticated: PropTypes.bool,
   setAlert: PropTypes.func.isRequired,
   recaptchaApproved: PropTypes.bool,
+  stripePayment: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -141,4 +169,4 @@ const mapStateToProps = (state) => ({
   recaptchaApproved: state.auth.recaptchaApproved,
 });
 
-export default connect(mapStateToProps, { setAlert })(Donations);
+export default connect(mapStateToProps, { setAlert, stripePayment })(Donations);

@@ -22,6 +22,7 @@ app.use('/api/twofa', require('./routes/api/twofa'));
 app.use('/api/email', require('./routes/api/email'));
 app.use('/api/image', require('./routes/api/image'));
 app.use('/api/csv', require('./routes/api/csv'));
+app.use('/api/stripe', require('./routes/api/stripe'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

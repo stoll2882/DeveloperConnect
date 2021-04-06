@@ -35,6 +35,17 @@ import setAuthToken from './utils/setAuthToken';
 // import './Bootstrap.css';
 import './App.css';
 
+import { loadStripe } from '@stripe/stripe-js';
+import {
+  CardElement,
+  Elements,
+  useStripe,
+  useElements,
+  ElementsConsumer
+} from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe("pk_live_51IYyIFHsswTRtrVskRFd8DddZQez8f2Kv4Gx35gyvxvD6N2sGOXEZetI9o0BTtvssq396ZdoVI6bJIDQmaciLDGW001pq3McNg");
+
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -104,7 +115,9 @@ const App = () => {
               <PrivateRoute exact path="/posts" component={Posts} />
               <PrivateRoute exact path="/posts/:id" component={Post} />
               <PrivateRoute exact path="/contact" component={Contact} />
-              <PrivateRoute exact path="/donations" component={Donations} />
+              <Elements stripe={stripePromise}>
+                <PrivateRoute exact path="/donations" component={Donations} />
+              </Elements>
               <PrivateRoute exact path="/admin" component={Admin} />
             </Switch>
           </section>

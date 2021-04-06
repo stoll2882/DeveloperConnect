@@ -36,6 +36,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading }, deleteAccount, 
   const successUpload = (dataRead) => {
     console.log(dataRead);
     uploadCsv(dataRead);
+    setAlert("User(s) uploaded successfully");
   }
 
   return (
@@ -58,6 +59,8 @@ const Profiles = ({ getProfiles, profile: { profiles, loading }, deleteAccount, 
           }
           <br></br>
           <h1 className="large text-primary">Upload CSV To Database</h1>
+          <h3>If user already exists in database, new user will not be registered.</h3>
+          <br></br>
           <CSVReader onFileLoaded={(dataRead, fileInfo) => successUpload(dataRead)} />
           <br></br>
           <h1 className="large text-primary">Manage Developers</h1>

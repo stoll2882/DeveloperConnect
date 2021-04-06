@@ -29,5 +29,8 @@
   "profilePics": {
     "storageUrl": "PROFILE_PIC_STORAGE_URL",
     "connectionString": "PROFILE_PIC_CONNECTION_STRING"
+  },
+  "stripe": {
+    "liveKey": "STRIPE_LIVE_KEY"
   }
 }
