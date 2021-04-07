@@ -5,9 +5,7 @@ import HttpsRedirect from 'react-https-redirect';
 
 ReactDOM.render(
   <React.StrictMode>
-    <HttpsRedirect>
-      <App />
-    </HttpsRedirect>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

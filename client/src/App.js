@@ -115,10 +115,10 @@ const App = () => {
               <PrivateRoute exact path="/posts" component={Posts} />
               <PrivateRoute exact path="/posts/:id" component={Post} />
               <PrivateRoute exact path="/contact" component={Contact} />
+              <PrivateRoute exact path="/admin" component={Admin} />
               <Elements stripe={stripePromise}>
                 <PrivateRoute exact path="/donations" component={Donations} />
               </Elements>
-              <PrivateRoute exact path="/admin" component={Admin} />
             </Switch>
           </section>
         </Fragment>
