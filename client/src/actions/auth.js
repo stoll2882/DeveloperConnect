@@ -422,3 +422,43 @@ export const stripePayment = (amount) => async (dispatch) => {
     console.log(err);
   }
 };
+
+// send payment confirmation email
+export const sendPaymentConfirmationEmail = (email, name, paymentMethod, amount) => async (dispatch) => {
+  var date = new Date();
+  var dd = String(date.getDate()).padStart(2, '0');
+  var mm = String(date.getMonth() + 1).padStart(2, '0');
+  var yyyy = date.getFullYear();
+
+  date = mm + '/' + dd + '/' + yyyy;
+
+  const body = { email, name, date, amount, paymentMethod };
+  try {
+    await axios.post('/api/email/paymentconfirmation', body);
+    dispatch({
+      type: WELCOME_EMAIL_SENT,
+    });
+    console.log('sending welcome email...');
+    sendWelcomeEmail(email, name);
+    return true;
+
+  } catch (err) {
+    dispatch({
+      type: WELCOME_EMAIL_FAILED,
+    });
+    return false;
+    // const errors = err.response.data.errors;
+  }
+};
+
+// Get Donations
+export const getDonations = () => async (dispatch) => {
+  try {
+    const res = await axios.get('/api/donations');
+    console.log(res.data);
+    console.log('posts retrieved');
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

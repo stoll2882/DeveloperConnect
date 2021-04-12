@@ -18,7 +18,11 @@ const Dropdown = ({ avatar, id, logout }) => {
     <Fragment>
       <div style={{ alignContent: 'center' }}>
         <Link to='/dashboard'>
-          <img src={avatar} style={{ maxWidth: '50px', borderRadius: '200px' }}></img>
+          { id == "601107dc69e4e177ba3d4234" ?
+            <img src={avatar} style={{ maxWidth: '50px', borderRadius: '200px', boxShadow: '0px 0px 2px 7px green', marginTop: '5px' }}></img>
+            :
+            <img src={avatar} style={{ maxWidth: '50px', borderRadius: '200px' }}></img>
+          }
         </Link>
         <i className='fas fa-caret-down' style={{ margin: 'auto', marginLeft: '10px', marginTop: '25px', float: 'right'}} onClick={toggle}></i>
       </div>
@@ -29,7 +33,12 @@ const Dropdown = ({ avatar, id, logout }) => {
           </li>
           { id == "601107dc69e4e177ba3d4234" &&
             <li className='dropdown-link'>
-              <Link to="/admin">Admin</Link>
+              <Link to="/admin">** Admin **</Link>
+            </li>
+          }
+          { id == "601107dc69e4e177ba3d4234" &&
+            <li className='dropdown-link'>
+              <Link to="/adminviewdonations">** View Donations **</Link>
             </li>
           }
           <li className='dropdown-link'>

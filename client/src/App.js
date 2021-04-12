@@ -25,6 +25,7 @@ import Donations from './components/auth/Donations';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Admin from './components/auth/Admin';
 import AdminProfile from './components/profile/AdminProfile';
+import AdminViewDonations from './components/auth/AdminViewDonations';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -116,6 +117,7 @@ const App = () => {
               <PrivateRoute exact path="/posts/:id" component={Post} />
               <PrivateRoute exact path="/contact" component={Contact} />
               <PrivateRoute exact path="/admin" component={Admin} />
+              <PrivateRoute exact path="/adminviewdonations" component={AdminViewDonations} />
               <Elements stripe={stripePromise}>
                 <PrivateRoute exact path="/donations" component={Donations} />
               </Elements>

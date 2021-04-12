@@ -10,6 +10,7 @@ import PayPal from './PayPal';
 import CurrencyInput from 'react-currency-input-field';
 import NumericInput from 'react-numeric-input';
 import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
+import { sendPaymentConfirmationEmail } from '../../actions/auth';
 import 'react-chat-widget/lib/styles.css';
 import { loadStripe } from '@stripe/stripe-js';
 import {
@@ -48,7 +49,7 @@ function CardSection() {
   return <CardElement options={CARD_ELEMENT_OPTIONS} />
 }
 
-export const Donations = ({ isAuthenticated, setAlert, stripePayment }) => {
+export const Donations = ({ isAuthenticated, setAlert, stripePayment, sendPaymentConfirmationEmail, auth: { user } }) => {
   const [amount, setAmount] = useState(1);
   const [money, setMoney] = useState(1);
   const [submitted, setSubmitted] = useState(false);
@@ -62,7 +63,10 @@ export const Donations = ({ isAuthenticated, setAlert, stripePayment }) => {
     <PayPalButton
       amount="0.1"
       currency="USD"
-      onSuccess={(details, data) => console.log(details)}
+      onSuccess={(details, data) => {
+        console.log(details);
+        sendPaymentConfirmationEmail(user.email, user.name, "Paypal", amount);
+      }}
       options={{
         clientId:
           'AW4p1KwQzUynoD34z7KZr3KxLLRcDFakLEbOmb5aNnMNh62IBr_py8F3vtcP73oavTfwHtuFx6SAez-r',
@@ -113,13 +117,15 @@ export const Donations = ({ isAuthenticated, setAlert, stripePayment }) => {
       var result = await stripe.confirmCardPayment(secret, {
         payment_method: paymentMethod.id
       });
+      sendPaymentConfirmationEmail(user.email, user.name, "Stripe", amount);
       console.log(result);
     }
   }
 
   return (
     <Fragment>
-      <h1 className="large text-primary">Donate to a Charity of Your Choice</h1>
+      <h1 className="large text-primary">Donate to Developer Connect</h1>
+      <h2>Welcome, {user.name}</h2>
       <p className="lead">
         Donations and Profits will go directly towards helping this site stay
         open.
@@ -162,11 +168,13 @@ Donations.propTypes = {
   setAlert: PropTypes.func.isRequired,
   recaptchaApproved: PropTypes.bool,
   stripePayment: PropTypes.func.isRequired,
+  sendPaymentConfirmationEmail: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   recaptchaApproved: state.auth.recaptchaApproved,
+  auth: state.auth,
 });
 
-export default connect(mapStateToProps, { setAlert, stripePayment })(Donations);
+export default connect(mapStateToProps, { setAlert, stripePayment, sendPaymentConfirmationEmail })(Donations);
