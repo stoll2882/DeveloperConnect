@@ -20,6 +20,9 @@ export const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => 
       <li style={{ marginTop: '20px' }}>
         <Link to="/donations">Donate</Link>
       </li>
+      <li style={{ marginTop: '20px' }}>
+        <Link to="/lookuptransaction">Lookup Transaction</Link>
+      </li>
       {/* <li style={{ marginTop: '20px' }}>
         <Link to="/dashboard">
           <i className="fas fa-user"></i>{' '}
@@ -38,6 +41,9 @@ export const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => 
     <ul>
       <li>
         <Link to="/profiles">Developers</Link>
+      </li>
+      <li>
+        <Link to="/lookuptransaction">Lookup Transaction</Link>
       </li>
       <li>
         <Link to="/register">Register</Link>

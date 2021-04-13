@@ -56,7 +56,6 @@ const Dropdown = ({ avatar, id, logout }) => {
 
 Dropdown.propTypes = {
   logout: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
 };
 
 export default connect(null, { logout })(Dropdown);

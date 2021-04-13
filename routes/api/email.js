@@ -65,9 +65,10 @@ router.post('/paymentconfirmation', async (req, res) => {
   var mail = {
     from: SITE_EMAIL,
     to: email,
-    subject: 'Welcome to Developer Connect',
+    subject: 'Your Donation Receipt',
     text: `Hi ${name}, \n\nMy name is Sam Toll, and I am the developer of Developer Connect. I wanted to personally thank you for donating to our site! 
-      \n\nDATE: ${date} 
+      \n\n***** RECEIPT *****
+      \nDATE: ${date} 
       \nDESCRIPTION: Donation to DeveloperConnect
       \nPAYMENT METHOD: ${paymentMethod}
       \nAMOUNT: $${amount}.00 USD

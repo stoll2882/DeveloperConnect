@@ -462,3 +462,14 @@ export const getDonations = () => async (dispatch) => {
     console.log(err);
   }
 };
+
+export const getDonation = (transactionId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/donations/${transactionId}`);
+    console.log(res.data);
+    var donation = res.data;
+    return donation;
+  } catch (err) {
+    console.log(err);
+  }
+}
