@@ -28,12 +28,14 @@ const Dropdown = ({ avatar, id, logout }) => {
       </div>
       {showDropdown && (
         <ul className={'dropdown-menu'} style={{ display: 'block', paddingRight: '200px' }}>
-          <li className='dropdown-link'>
-            <Link to='/contact'>Contact Us</Link>
-          </li>
           { id == "601107dc69e4e177ba3d4234" &&
             <li className='dropdown-link'>
-              <Link to="/admin">** Admin **</Link>
+              <Link to="/admin">** Manage Users **</Link>
+            </li>
+          }
+          { id == "601107dc69e4e177ba3d4234" &&
+            <li className='dropdown-link'>
+              <Link to="/csvmanagement">** Manage CSV **</Link>
             </li>
           }
           { id == "601107dc69e4e177ba3d4234" &&
@@ -43,6 +45,9 @@ const Dropdown = ({ avatar, id, logout }) => {
           }
           <li className='dropdown-link'>
             <Link to='/dashboard'>My Profile</Link>
+          </li>
+          <li className='dropdown-link'>
+            <Link to='/contact'>Contact Us</Link>
           </li>
           <li className='dropdown-link'>
             <i className="fas fa-sign-out-alt" style={{ color: 'white' }}></i>

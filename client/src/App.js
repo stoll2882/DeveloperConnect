@@ -45,6 +45,7 @@ import {
   useElements,
   ElementsConsumer
 } from '@stripe/react-stripe-js';
+import CSVManagement from './components/auth/CSVManagement';
 
 const stripePromise = loadStripe("pk_live_51IYyIFHsswTRtrVskRFd8DddZQez8f2Kv4Gx35gyvxvD6N2sGOXEZetI9o0BTtvssq396ZdoVI6bJIDQmaciLDGW001pq3McNg");
 
@@ -119,6 +120,7 @@ const App = () => {
               <PrivateRoute exact path="/posts/:id" component={Post} />
               <PrivateRoute exact path="/contact" component={Contact} />
               <PrivateRoute exact path="/admin" component={Admin} />
+              <PrivateRoute exact path="/csvmanagement" component={CSVManagement} />
               <PrivateRoute exact path="/adminviewdonations" component={AdminViewDonations} />
               <Elements stripe={stripePromise}>
                 <PrivateRoute exact path="/donations" component={Donations} />

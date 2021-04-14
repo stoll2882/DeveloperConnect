@@ -8,12 +8,6 @@ const DonationLookup = ({ getDonation, getDonations }) => {
     const [donation, setDonation] = useState();
     const [transactionId, setTransactionId] = useState('');
 
-    // useEffect(async () => {
-    //     if (transactionId) {
-    //         setDonation(await getDonation(transactionId));
-    //     }
-    // }, [getDonation]);
-
     const onSubmit = async (e) => {
         e.preventDefault();
         var currDonation = await getDonation(transactionId);
