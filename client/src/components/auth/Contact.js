@@ -9,6 +9,8 @@ import { setAlert } from '../../actions/alert';
 import { CometChat } from "@cometchat-pro/chat"
 import { Widget, addResponseMessage, addLinkSnippet, addUserMessage } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
+import GoogleMapReact from 'google-map-react';
+import './map.css';
 
 const Contact = ({
   setAlert,
@@ -104,6 +106,10 @@ const Contact = ({
         </div>
         <input type="submit" className="btn btn-primary" value="Submit" />
       </form>
+      <br></br>
+      <br></br>
+      <h2>Or chat with us directly!</h2>
+      <iframe src='https://deadsimplechat.com/oi1_Ch3BI' width='100%' height='500px'></iframe>
       {/* <iframe src="https://deadsimplechat.com/oi1_Ch3BI" style="width: 100%; height: 500px;"></iframe>
        */}
        {/* <Widget
