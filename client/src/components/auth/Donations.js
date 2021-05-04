@@ -69,7 +69,8 @@ export const Donations = ({ isAuthenticated, setAlert, stripePayment, sendPaymen
       }}
       options={{
         clientId:
-          'AW4p1KwQzUynoD34z7KZr3KxLLRcDFakLEbOmb5aNnMNh62IBr_py8F3vtcP73oavTfwHtuFx6SAez-r',
+          // 'AW4p1KwQzUynoD34z7KZr3KxLLRcDFakLEbOmb5aNnMNh62IBr_py8F3vtcP73oavTfwHtuFx6SAez-r',
+          'Aaub5SQKM-ZEWBc3OiWvzMptPRpYKtpoBZQ0xcvQSYQGUkKTgqGqWw4xVqcQZDEBZ90txohTDHSZlBmN',
       }}
       createOrder={(data, actions) => {
         return actions.order.create({
